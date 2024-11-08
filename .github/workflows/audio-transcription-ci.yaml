@@ -1,0 +1,42 @@
+name: Audio Transcription Service CI
+
+on:
+  push:
+    paths:
+      - 'audio-transcription/**'
+  pull_request:
+    paths:
+      - 'audio-transcription/**'
+
+jobs:
+  lint-format-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.13'
+
+      - name: Install Poetry
+        run: |
+          curl -sSL https://install.python-poetry.org | python3 -
+          echo "$HOME/.local/bin" >> $GITHUB_PATH
+
+      - name: Install dependencies
+        working-directory: ./audio-transcription
+        run: |
+          poetry install
+
+      - name: Run Pre-Commit hooks (Linting and Formatting)
+        working-directory: ./audio-transcription
+        run: |
+          poetry run pre-commit run --all-files
+
+      - name: Run Tests
+        working-directory: ./audio-transcription
+        run: |
+          poetry run pytest

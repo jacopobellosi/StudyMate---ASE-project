@@ -1,0 +1,22 @@
+[tool.poetry]
+name = "audio-transcription"
+version = "0.1.0"
+description = ""
+authors = ["Arina <yusupovaari@yandex.ru>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.13"
+
+
+[tool.poetry.group.dev.dependencies]
+black = "^24.10.0"
+flake8 = "^7.1.1"
+isort = "^5.13.2"
+pre-commit = "^4.0.1"
+pytest = "^8.3.3"
+pytest-cov = "^6.0.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
