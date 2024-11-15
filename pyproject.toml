@@ -1,8 +1,8 @@
 [tool.poetry]
-name = "user-management-microservice"
+name = "AI-Summarizer Web-Serivce"
 version = "0.1.0"
-description = "A microservice for managing user registration, authentication, and data storage, built with Flask and designed for integration into the ASE AI Summarizer application."
-authors = ["Deyvla2 <91744946+Deyvla2@users.noreply.github.com>"]
+description = "Web-Baesd tool for summarizing texts using AI"
+authors = [""]
 readme = "README.md"
 [tool.poetry.dependencies]
 python = "^3.13"
