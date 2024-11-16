@@ -16,27 +16,9 @@ jobs:
       - name: Check out code
         uses: actions/checkout@v3
 
-      - name: Set up Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.13'
-
-      - name: Install Poetry
-        run: |
-          curl -sSL https://install.python-poetry.org | python3 -
-          echo "$HOME/.local/bin" >> $GITHUB_PATH
-
-      - name: Install dependencies
-        working-directory: ./character-recognition
-        run: |
-          poetry install
-
-      - name: Run Pre-Commit hooks (Linting and Formatting)
-        working-directory: ./character-recognition
-        run: |
-          poetry run pre-commit run --all-files
+      - name: Build Docker Image
+        run: docker build -t character-recognition ./character-recognition
 
       - name: Run Tests
-        working-directory: ./character-recognition
         run: |
-          poetry run pytest
+          docker run --rm character-recognition bash -c "poetry run pytest tests"
