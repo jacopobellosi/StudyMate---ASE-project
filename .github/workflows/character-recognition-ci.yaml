@@ -1,12 +1,12 @@
-name: Audio Transcription Service CI
+name: Optical character recognition Service CI
 
 on:
   push:
     paths:
-      - 'audio-transcription/**'
+      - '../../character-recognition/**'
   pull_request:
     paths:
-      - 'audio-transcription/**'
+      - '../../character-recognition/**'
 
 jobs:
   lint-format-test:
@@ -27,16 +27,16 @@ jobs:
           echo "$HOME/.local/bin" >> $GITHUB_PATH
 
       - name: Install dependencies
-        working-directory: ./audio-transcription
+        working-directory: ./character-recognition
         run: |
           poetry install
 
       - name: Run Pre-Commit hooks (Linting and Formatting)
-        working-directory: ./audio-transcription
+        working-directory: ./character-recognition
         run: |
           poetry run pre-commit run --all-files
 
       - name: Run Tests
-        working-directory: ./audio-transcription
+        working-directory: ./character-recognition
         run: |
           poetry run pytest
