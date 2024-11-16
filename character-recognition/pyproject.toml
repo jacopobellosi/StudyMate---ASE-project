@@ -7,6 +7,8 @@ readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "^3.13"
+pytesseract = "^0.3.13"
+flask = "^3.1.0"
 
 
 [tool.poetry.group.dev.dependencies]
