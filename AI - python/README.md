@@ -81,12 +81,12 @@ POST /summarize/
 **Example Response**:
 ```http
  {    "summary": "Quantum computing uses qubits, leveraging superposition to solve problems faster than traditional computers."  }   
-```http
+```
 
 **Error Response** (Invalid length parameter):
 ```http
  {    "detail": "Length parameter must be 'detailed' or 'short'."  } 
-```http
+```
 **Development and Deployment**
 ------------------------------
 
