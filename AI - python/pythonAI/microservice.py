@@ -8,46 +8,53 @@ app = FastAPI()
 # Modello per la richiesta
 class SummaryRequest(BaseModel):
     text: str
-    percentage: float
+    style: str
 
 
 # Endpoint principale
 @app.post("/summarize/")
 async def summarize(request: SummaryRequest):
     try:
-        # How much the text has to be summarized?
-        per = request.percentage
-        if not (1 <= per <= 100):
-            raise HTTPException(status_code=400, detail="Percentage must be between 1 and 100.")
 
-        # Prompt per il riassunto
-        prompt = (
-            "You are an expert of writing and summarization, that need to summarize in a precise way the following text."
-            f"Please summarize the following text into a shorter version while keeping the same tone, "
-            f"style, and meaning. The summary should reduce the original text to approximately {request.percentage}% "
-            f"of its length. Do not use bullet points, lists, or any structural changes. The summary should be natural and concise.\n\n"
-            f"Text: {request.text}"
-        )
+        length = request.style.lower()  # "detailed" or "short"
+        if length not in ["detailed", "short"]:
+            raise HTTPException(status_code=400, detail="Length parameter must be 'detailed' or 'short'.")
+
+        if length == "detailed":
+            prompt = (
+                "Summarize the following text into a detailed summary that retains all key information "
+                "and reduces the length by approximately 50%. Maintain the original tone, style, and meaning.\n\n"
+                f"Text: {request.text}"
+            )
+        elif length == "short":
+            prompt = (
+                "Summarize the following text into a short summary that condenses the content by approximately 70%. "
+                "Focus only on the most essential information while maintaining the tone and style of the original.\n\n"
+                f"Text: {request.text}"
+            )
+        else:
+            raise HTTPException(status_code=400, detail="Length parameter must be 'detailed' or 'short'.")
+
         # Chiamata a Ollama
         response = ollama.generate(model='llama3.2', prompt=prompt,
                                    options= Options(temperature=0.0,top_k = 20,top_p = 0.5),
                                    system="""Full context:
-                                            You are a highly intelligent and precise text summarizer. Your goal is to create concise summaries of given texts while adhering to the following guidelines:
-                                            1. **Tone and Style**: Maintain the original tone, style, and clarity of the input text. The summary should feel as if it were written by the same author.
-                                            2. **Compression Level**: Adjust the length of the summary based on the specified percentage of the original text. If a percentage is provided (e.g., 50%), aim to reduce the text to approximately that proportion. If no percentage is provided, default to a concise summary without rigid constraints.
-                                            3. **Natural Flow**: Write the summary as a fluent and natural paragraph. Avoid bullet points, lists, or altering the structure unless explicitly requested.
-                                            4. **Focus on Essentials**: Retain the core meaning and key details of the input text while removing redundancy and irrelevant information.
-                                            5. **Error Handling**: If the input text is unclear, ambiguous, or inappropriate, respond with a polite clarification or error message.
-                                            
-                                            Steps:
-                                            1. Read and examine the text, understanding the meaning of it.
-                                            2. Write the summarization following the rules mentioned above
+                                            You are an expert text summarizer designed to create summaries based on the specified length preferences. Your task is to generate accurate and concise summaries while adhering to the following rules:
+
+                                            1. **Length Options**: The user will specify the length as either:
+                                               - `"detailed"`: Create a detailed summary that retains all key information, reducing the original text by approximately 50%.
+                                               - `"short"`: Create a much shorter summary, condensing the original text by approximately 70%, while retaining only the most essential information.
+                                            2. **Tone and Style**: Maintain the original tone and style of the input text. Ensure the summary feels cohesive and natural.
+                                            3. **Structure**: Write the summary as a single paragraph without using lists, bullet points, or formatting changes.
+                                            4. **Focus**: Highlight the core meaning and remove irrelevant or redundant details. For `"short"`, prioritize brevity over detailed explanations.
                                             
                                             Example:
-                                            Input: "Quantum computing uses qubits, which can be in superposition, allowing quantum computers to perform computations faster than traditional computers in some cases."
-                                            Summary at 50%: "Quantum computing uses qubits in superposition to solve problems faster than traditional computers."
+                                            - Input: "Quantum computing uses qubits, which can be in superposition, allowing quantum computers to perform computations faster than traditional computers in some cases."
+                                              - **Detailed Summary**: "Quantum computing uses qubits, which leverage superposition to perform faster computations than traditional computers."
+                                              - **Short Summary**: "Quantum computing uses qubits for faster problem-solving."
                                             
-                                            Always follow these principles unless instructed otherwise.
+                                            Always follow these principles unless explicitly instructed otherwise.
+
                                             """
 
 
