@@ -69,7 +69,7 @@ POST /summarize/
 ```
 **Request Body**:
 ```http
-{    "text": "Your input text goes here.",    "length": "detailed"  }   `
+{    "text": "Your input text goes here.",    "length": "detailed"  } 
 ```
 **Parameters**:
 
