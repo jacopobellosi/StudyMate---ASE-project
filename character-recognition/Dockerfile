@@ -5,8 +5,13 @@ ENV POETRY_VIRTUALENVS_CREATE=false
 ENV PATH="$POETRY_HOME/bin:$PATH"
 
 # Install Poetry
-RUN apt-get update && apt-get install -y curl
-RUN curl -sSL https://install.python-poetry.org | python -
+RUN apt-get update && apt-get install -y  \
+    tesseract-ocr \
+    curl \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install Poetry (pinned version)
+RUN curl -sSL https://install.python-poetry.org | python - --version 1.6.1
 
 # Install Python runtime dependencies
 WORKDIR /app
@@ -15,8 +20,7 @@ RUN poetry install --no-root
 
 # Install application
 COPY . .
-RUN poetry install --only main
 
 EXPOSE 5001
 
-CMD ["python3", "server.py"]
+CMD  ["python3", "server.py"]
