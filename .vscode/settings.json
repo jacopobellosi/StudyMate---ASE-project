@@ -1,9 +1,0 @@
-{
-    "python.pythonPath": "path_to_conda_env/bin/python",
-    "editor.formatOnSave": true,
-    "python.testing.pytestArgs": [
-        "user-management"
-    ],
-    "python.testing.unittestEnabled": false,
-    "python.testing.pytestEnabled": true
-}
