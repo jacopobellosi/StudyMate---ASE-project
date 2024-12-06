@@ -1,5 +1,10 @@
+import logging
+
 from app.extractor import extract_text_from_image
 from flask import Flask, jsonify, request
+from prometheus_flask_exporter import PrometheusMetrics
+
+logging.basicConfig(level=logging.DEBUG)
 
 ALLOWED_EXTENSIONS = {"png", "jpg", "jpeg"}
 
@@ -8,9 +13,14 @@ def create_app(test_config=None):
     app = Flask(__name__)
     app.config["MAX_CONTENT_LENGTH"] = 16 * 1000 * 1000
 
+    metrics = PrometheusMetrics(app)  # noqa: F841
+
     if test_config:
-        # load the test config if passed in
         app.config.from_mapping(test_config)
+
+    @app.route("/health", methods=["GET"])
+    def health():
+        return {"status": "healthy"}, 200
 
     @app.route("/extract-text", methods=["POST"])
     def extract_text():

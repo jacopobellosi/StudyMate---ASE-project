@@ -9,6 +9,7 @@ readme = "README.md"
 python = "^3.13"
 pytesseract = "^0.3.13"
 flask = "^3.1.0"
+prometheus-flask-exporter = "^0.23.1"
 
 
 [tool.poetry.group.dev.dependencies]
@@ -18,6 +19,7 @@ isort = "^5.13.2"
 pytest = "^8.3.3"
 pytest-cov = "^6.0.0"
 pre-commit = "^4.0.1"
+locust = "^2.32.4"
 
 [build-system]
 requires = ["poetry-core"]

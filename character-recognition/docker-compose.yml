@@ -1,0 +1,36 @@
+services:
+  app:
+    build: .
+    ports:
+      - "5001:5001"
+    environment:
+      - FLASK_APP=app
+      - FLASK_ENV=production
+    volumes:
+      - .:/app
+    depends_on:
+      - prometheus
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:5001/health" ]
+      interval: 30s
+      retries: 3
+
+  prometheus:
+    image: prom/prometheus:latest
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+    ports:
+      - "9090:9090"
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+    restart: always
+
+  locust:
+    build: .
+    command: locust --host=http://app:5001
+    depends_on:
+      - app
+    ports:
+      - "8090:8090"
+    volumes:
+      - .:/app
