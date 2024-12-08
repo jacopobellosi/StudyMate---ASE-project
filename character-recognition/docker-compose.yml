@@ -28,7 +28,7 @@ services:
       - "8089:8089"
     volumes:
       - ./locustfile.py:/mnt/locust/locustfile.py
-      - ./tests:/mnt/locust/tests
+      - ./tests/data:/mnt/locust/tests/data
     environment:
       TARGET_HOST: http://app:5001
     depends_on:
