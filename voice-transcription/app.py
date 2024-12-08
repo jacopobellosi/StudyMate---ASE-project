@@ -1,5 +1,5 @@
 from vosk_transcriptor.transcriptor import transcribe
-from fastapi import FastAPI, File, UploadFile
+from fastapi import FastAPI, File, UploadFile, HTTPException
 import pathlib
 
 # initialization code
