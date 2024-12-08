@@ -1,11 +1,7 @@
-# pip install vosk
-
 import vosk
 import wave
 import sys
 import json
-
-# model downloaded from: https://alphacephei.com/vosk/models
 
 vosk.SetLogLevel(-1) # not interested in logs
 model = vosk.Model(lang="en-us")

@@ -1,12 +1,11 @@
-# pip install fastapi[standard]
-# pip install python-multipart
-# run: fastapi dev app.py (OR)
-# run: uvicorn app:app --reload
-
 from vosk_transcriptor.transcriptor import transcribe
 from fastapi import FastAPI, File, UploadFile
+import pathlib
 
+# initialization code
 app = FastAPI()
+pathlib.Path("audio_files").mkdir(parents=True, exist_ok=True)
+
 
 @app.get("/")
 async def read_root():
