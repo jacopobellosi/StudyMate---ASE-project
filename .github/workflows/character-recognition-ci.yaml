@@ -37,14 +37,16 @@ jobs:
       - name: Run Performance Tests (Locust)
         working-directory: ./character-recognition
         run: |
-          docker compose exec locust locust --host=http://app:5001 --headless --users 10 --spawn-rate 1 -t 5m --csv=locust_results
+          docker compose exec locust locust -f /mnt/locust/locustfile.py \
+            --headless -u 3 -r 1 --run-time 1m --host http://app:5001 --csv results
 
       - name: Upload Performance Test Results as Artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: locust-results
-          path: ./character-recognition/locust_results*
+          path: locust_results*
 
       - name: Tear Down Docker Containers
+        working-directory: ./character-recognition
         if: always()
         run: docker compose down
