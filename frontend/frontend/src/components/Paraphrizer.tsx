@@ -1,10 +1,11 @@
 import Footer from "./Footer";
+import Header from "./Header";
 import Textareas from "./Textareas";
 
 function Paraphrizer() {
   return (
     <div className="container-fluid vh-100 d-flex flex-column">
-      <h1>Paraphrizer</h1>
+      <Header title="Paraphrazer" />
       <div className="d-flex align-items-center gap-2">
         <p>Style: </p>
         <button type="button" className="btn btn-outline-success">

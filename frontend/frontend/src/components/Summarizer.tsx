@@ -1,10 +1,11 @@
 import Textareas from "./Textareas";
 import Footer from "./Footer";
+import Header from "./Header";
 
 function Summarizer() {
   return (
     <div className="container-fluid vh-100 d-flex flex-column">
-      <h1>Summarizer</h1>
+      <Header title="Summarizer" />
       <div className="d-flex align-items-center gap-2">
         <p>Style: </p>
         <button type="button" className="btn btn-outline-success">
