@@ -1,28 +1,24 @@
-## TODO
-- standardize file input
-- take params for language and model size as input
-- add unit testing
-- function comments
-- black, poetry
-- github precommits
-- maybe docker?
+# Transcriptfy
+A microservice for transcribing audio files. Currently, it supports English only.
 
-Required libraries:
-```ps1
-pip install fastapi[standard]
-pip install python-multipart
-pip install vosk
-```
+### Installing required libraries:
+ 1. You need to have [poetry](https://python-poetry.org/docs/) installed.
+ 2. within the `voice-transcription` directory, **run:** `poetry install` 
 
-To run the application:
- `uvicorn app:app --reload` within the `voice-transcription` directory (transcriptify microservice parent directory).
+### To run the application:
+ within the `voice-transcription` directory, **run:** `poetry run uvicorn app:app --reload` 
+ 
+### Code formatting
+This project uses black as code formatter, to run the formatter:
+`poetry run black`
 
-- backend: FastAPI
+
+### Main libraries used
+- backend: `FastAPI`
 - Model: `Vosk`
 
 
-
-### Vosk:
+## Vosk:
 
 Vosk is a speech recognition toolkit.
 
@@ -37,6 +33,7 @@ Vosk is a speech recognition toolkit.
 | vosk-model-small-en-us-0.15 | 40M | Lightweight wideband model for Android and RPi |
 | vosk-model-en-us-0.22 | 1.8G | Accurate generic US English model |
 
+---
 
 ### Open Source Notice
-This microservice uses FFmpeg for converting audio formats
+This microservice uses (but doesn't distribute) FFmpeg for converting audio formats
