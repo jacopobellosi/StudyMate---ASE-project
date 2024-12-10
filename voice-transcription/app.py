@@ -10,20 +10,24 @@ app = FastAPI()
 pathlib.Path("audio_files").mkdir(parents=True, exist_ok=True)
 ##
 
+
 @app.get("/")
 async def home():
     return "Transcriptify running..."
+
 
 @app.post("/transcribe")
 async def transcribe_audio(file: UploadFile = File(...)):
     try:
         contents = file.file.read()
         unqiue_file_identifier = str(uuid.uuid1())
-        filepath = abspath(f"./audio_files/rcvd_{unqiue_file_identifier}_{file.filename}")
-        with open(filepath, 'wb') as f:
+        filepath = abspath(
+            f"./audio_files/rcvd_{unqiue_file_identifier}_{file.filename}"
+        )
+        with open(filepath, "wb") as f:
             f.write(contents)
     except Exception:
-        raise HTTPException(status_code=500, detail='Something went wrong')
+        raise HTTPException(status_code=500, detail="Something went wrong")
     finally:
         file.file.close()
 
@@ -32,5 +36,4 @@ async def transcribe_audio(file: UploadFile = File(...)):
     # deleting stored file
     remove(filepath)
 
-    return {"status": "success",
-            "text": prediction}
+    return {"status": "success", "text": prediction}
