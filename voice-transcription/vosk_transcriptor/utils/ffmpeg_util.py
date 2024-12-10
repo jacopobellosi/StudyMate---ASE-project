@@ -11,6 +11,7 @@ import uuid
 #
 # ffmpeg -i [in_file] -acodec pcm_s16le -ar 16000 -ac 1 [out_file.wav]
 
+
 def convert_std_wav(in_file):
     unique_file_identifier = str(uuid.uuid1())
     file_dirname = path.dirname(in_file)
@@ -24,6 +25,6 @@ def convert_std_wav(in_file):
 
     if "Error" in str(output):
         raise Exception(f"Cannot convert file {in_file} using FFmpeg")
-    
+
     # else, file is created successfully
     return out_file

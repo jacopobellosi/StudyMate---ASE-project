@@ -10,7 +10,7 @@ A microservice for transcribing audio files. Currently, it supports English only
  
 ### Code formatting
 This project uses black as code formatter, to run the formatter:
-`poetry run black`
+`poetry run black .`
 
 
 ### Main libraries used
