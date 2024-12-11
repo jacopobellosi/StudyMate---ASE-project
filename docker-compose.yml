@@ -1,0 +1,22 @@
+services:
+  character-recognition:
+    build: ./character-recognition
+    ports:
+      - "5001:5001"
+    volumes:
+      - ./character-recognition:/app
+    networks:
+      - app-network
+
+  paraphrasing-tool:
+    build: ./paraphrasing-tool
+    ports:
+      - "5002:5000"
+    volumes:
+      - ./paraphrasing-tool:/app
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
