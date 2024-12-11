@@ -5,7 +5,7 @@ from os import remove
 import uuid
 import pathlib
 
-# initialization code
+## initialization code
 app = FastAPI()
 pathlib.Path("audio_files").mkdir(parents=True, exist_ok=True)
 ##

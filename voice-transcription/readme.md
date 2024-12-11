@@ -2,15 +2,22 @@
 A microservice for transcribing audio files. Currently, it supports English only.
 
 ### Installing required libraries:
- 1. You need to have [poetry](https://python-poetry.org/docs/) installed.
+ 1. You need to have [Poetry](https://python-poetry.org/docs/) installed.
+ 2. You need to have [FFmpeg](https://www.ffmpeg.org/download.html) available in the system path.
  2. within the `voice-transcription` directory, **run:** `poetry install` 
 
 ### To run the application:
- within the `voice-transcription` directory, **run:** `poetry run uvicorn app:app --reload` 
+ within the `voice-transcription` directory, **run:** `poetry run uvicorn app:app --host 0.0.0.0 --reload` 
  
 ### Code formatting
 This project uses black as code formatter, to run the formatter:
 `poetry run black .`
+
+### Docker steps:
+#### Building image with `tag=voice-transcription:latest`
+`docker build -t voice-transcription:latest .`
+#### Running the image
+`docker run -d -p 8000:8000 --name transcriptify voice-transcription:latest`
 
 
 ### Main libraries used
@@ -37,3 +44,14 @@ Vosk is a speech recognition toolkit.
 
 ### Open Source Notice
 This microservice uses (but doesn't distribute) FFmpeg for converting audio formats
+
+
+## TODO
+- ~~standardize file input~~
+- take params for language and model size as input
+- add unit testing
+- function comments
+- ~~black~~
+- ~~poetry~~
+- github precommits
+- ~~maybe docker?~~
