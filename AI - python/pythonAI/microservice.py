@@ -2,7 +2,17 @@ from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 import ollama
 from ollama import Options
+from fastapi.middleware.cors import CORSMiddleware
 app = FastAPI()
+
+# Allow CORS for the frontend
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:5173"],  # Frontend URL
+    allow_credentials=True,
+    allow_methods=["*"],  # Allow all HTTP methods
+    allow_headers=["*"],  # Allow all headers
+)
 
 
 # Modello per la richiesta
