@@ -1,6 +1,11 @@
 import { useState } from "react";
 
-const Textareas = () => {
+interface TextareasProps {
+  value: string;
+  onChange: (value: string) => void;
+}
+
+const Textareas = ({ value, onChange }: TextareasProps) => {
   const [text, setText] = useState("");
 
   const handleClear = () => {
@@ -37,6 +42,8 @@ const Textareas = () => {
             id="output"
             readOnly
             style={{ resize: "none" }}
+            value={value}
+            onChange={(e) => onChange(e.target.value)} // Call the onChange function with the new value
           />
         </div>
       </div>
