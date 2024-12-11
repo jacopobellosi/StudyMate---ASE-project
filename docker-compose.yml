@@ -17,6 +17,15 @@ services:
     networks:
       - app-network
 
+  voice-transcription:
+    build: ./voice-transcription  # This ensures the build context is set correctly
+    ports:
+      - "5003:8000"
+    volumes:
+      - ./voice-transcription:/app
+    networks:
+      - app-network
+
 networks:
   app-network:
     driver: bridge
