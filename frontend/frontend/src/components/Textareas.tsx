@@ -1,8 +1,11 @@
-import { useState } from "react";
+import React from "react";
 
-const Textareas = () => {
-  const [text, setText] = useState("");
+interface TextareasProps {
+  text: string;
+  setText: React.Dispatch<React.SetStateAction<string>>;
+}
 
+const Textareas: React.FC<TextareasProps> = ({ text, setText }) => {
   const handleClear = () => {
     setText("");
   };
