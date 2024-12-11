@@ -1,9 +1,16 @@
 # Transcriptfy
 A microservice for transcribing audio files. Currently, it supports English only.
 
+## Running using Docker:
+#### Building an image:
+`docker build -t voice-transcription:latest .`
+#### Running the image on port `8000`:
+`docker run -d -p 8000:8000 --name transcriptify voice-transcription:latest`
+
+## Running Locally
 ### Installing required libraries:
  1. You need to have [Poetry](https://python-poetry.org/docs/) installed.
- 2. You need to have [FFmpeg](https://www.ffmpeg.org/download.html) available in the system path.
+ 2. You need to have [FFmpeg](https://www.ffmpeg.org/download.html) available in the system path
  2. within the `voice-transcription` directory, **run:** `poetry install` 
 
 ### To run the application:
@@ -13,19 +20,14 @@ A microservice for transcribing audio files. Currently, it supports English only
 This project uses black as code formatter, to run the formatter:
 `poetry run black .`
 
-### Docker steps:
-#### Building image with `tag=voice-transcription:latest`
-`docker build -t voice-transcription:latest .`
-#### Running the image
-`docker run -d -p 8000:8000 --name transcriptify voice-transcription:latest`
 
-
+## Microservice Description
 ### Main libraries used
 - backend: `FastAPI`
 - Model: `Vosk`
 
 
-## Vosk:
+### Vosk:
 
 Vosk is a speech recognition toolkit.
 
