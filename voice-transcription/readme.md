@@ -1,5 +1,6 @@
 # Transcriptfy
-A microservice for transcribing audio files. Currently, it supports English only.
+A microservice built using FastAPI for transcribing audio files. Currently, it supports transcribing English only using a model called `Vosk`. FFmpeg is used for converting audio files to a Vosk-supported format.
+
 
 ## Running using Docker:
 #### Building an image:
@@ -20,6 +21,17 @@ A microservice for transcribing audio files. Currently, it supports English only
 This project uses black as code formatter, to run the formatter:
 `poetry run black .`
 
+### Endpoint testing
+To automate endpoint tests, `Postman` is used.
+
+- `GET /`
+![GET request](/voice-transcription/endpoint_testing/screenshots/get1.png "Title")
+
+- `POST /transcribe` (using a .wav file)
+![POST request](/voice-transcription/endpoint_testing/screenshots/post1.png "Title")
+
+- `POST /transcribe` (using a .ogg file)
+![POST request](/voice-transcription/endpoint_testing/screenshots/post2.png "Title")
 
 ## Microservice Description
 ### Main libraries used
@@ -49,11 +61,13 @@ This microservice uses (but doesn't distribute) FFmpeg for converting audio form
 
 
 ## TODO
-- ~~standardize file input~~
+
+- frontend integration
 - take params for language and model size as input
-- add unit testing
-- function comments
+- unit testing using pytest
+- code documentation
+- github precommits
 - ~~black~~
 - ~~poetry~~
-- github precommits
-- ~~maybe docker?~~
+- ~~maybe docker~~
+- ~~standardize file input format~~
