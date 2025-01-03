@@ -4,9 +4,9 @@ const Footer = () => {
   let navigate = useNavigate();
   return (
     <div className="container-fluid justify-content-center align-items-center text-center mb-3">
-      <h4>
-        Made with <i className="bi bi-suit-heart-fill"></i> in AAU
-      </h4>
+      <h5>
+        Made with 💜 in AAU
+      </h5>
       <a
         href="#"
         className="link-dark link-offset-2 link-underline-opacity-0 link-underline-opacity-100-hover me-2"

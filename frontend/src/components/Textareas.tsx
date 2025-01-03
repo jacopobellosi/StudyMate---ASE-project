@@ -19,7 +19,7 @@ const Textareas = ({ value, onChange }: TextareasProps) => {
           <textarea
             className="form-control h-100"
             id="input"
-            placeholder="To rewrite text, enter or paste it here and press Paraphraze"
+            placeholder="To rewrite text, enter or paste it here and press Paraphrase"
             style={{ resize: "none" }}
             value={text} // Bind the value to the state
             onChange={(e) => setText(e.target.value)} // Update state on change

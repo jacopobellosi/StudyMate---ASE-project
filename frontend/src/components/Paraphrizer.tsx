@@ -26,7 +26,7 @@ function Paraphrizer() {
   };
   return (
     <div className="container-fluid vh-100 d-flex flex-column">
-      <Header title="Paraphrazer" />
+      <Header title="Paraphraser" />
       <div className="d-flex align-items-center gap-2">
         <p>Style: </p>
         <button type="button" className="btn btn-outline-success">
@@ -54,7 +54,7 @@ function Paraphrizer() {
           Upload Audio
         </button>
         <button type="button" className="btn btn-success">
-          Paraphraze
+          Paraphrase
         </button>
       </div>
 
