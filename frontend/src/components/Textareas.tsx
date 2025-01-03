@@ -1,13 +1,11 @@
-import { useState } from "react";
+import React from "react";
 
 interface TextareasProps {
-  value: string;
-  onChange: (value: string) => void;
+  text: string;
+  setText: React.Dispatch<React.SetStateAction<string>>;
 }
 
-const Textareas = ({ value, onChange }: TextareasProps) => {
-  const [text, setText] = useState("");
-
+const Textareas: React.FC<TextareasProps> = ({ text, setText }) => {
   const handleClear = () => {
     setText("");
   };
@@ -19,7 +17,7 @@ const Textareas = ({ value, onChange }: TextareasProps) => {
           <textarea
             className="form-control h-100"
             id="input"
-            placeholder="To rewrite text, enter or paste it here and press Paraphrase"
+            placeholder="To rewrite text, enter or paste it here and press Paraphraze"
             style={{ resize: "none" }}
             value={text} // Bind the value to the state
             onChange={(e) => setText(e.target.value)} // Update state on change
@@ -42,8 +40,6 @@ const Textareas = ({ value, onChange }: TextareasProps) => {
             id="output"
             readOnly
             style={{ resize: "none" }}
-            value={value}
-            onChange={(e) => onChange(e.target.value)} // Call the onChange function with the new value
           />
         </div>
       </div>

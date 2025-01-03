@@ -1,32 +1,65 @@
+import React, { useState } from "react";
 import Footer from "./Footer";
 import Header from "./Header";
 import Textareas from "./Textareas";
-import axios from "axios";
-import { useState } from "react";
 
 function Paraphrizer() {
-  const [summary, setSummary] = useState(null);
-  const handleSubmit = async () => {
-    // Data to send to the API
-    const requestData = {
-      text: Text,
-      percentage: 50,
-    };
+  const [userText, setUserText] = useState("");
 
-    try {
-      // Make a POST request to the FastAPI endpoint
-      const response = await axios.post(
-        "http://127.0.0.1:8000/summarize/",
-        requestData
-      );
-      setSummary(response.data); // Save the response
-    } catch (error) {
-      console.error("Error communicating with the API:", error);
+  // Handle image upload and extract text
+  const handleImageUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      const formData = new FormData();
+      formData.append("file", file);
+
+      try {
+        const response = await fetch("http://localhost:5003/extract-text", {
+          method: "POST",
+          body: formData,
+        });
+
+        const data = await response.json();
+        if (response.ok) {
+          setUserText(data.extracted_text); // Update userText with extracted text
+        } else {
+          alert(data.error); // Handle error
+        }
+      } catch (error) {
+        console.error("Error uploading file:", error);
+      }
     }
   };
+
+  const handleAudioUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      const formData = new FormData();
+      formData.append("file", file); // Append the file to the FormData object
+
+      try {
+        const response = await fetch("http://127.0.0.1:8000/transcribe", {
+          method: "POST",
+          body: formData
+        });
+
+        const data = await response.json(); // Parse the JSON response
+
+        if (response.ok) {
+          setUserText(data.text); // Update userText with extracted text
+        } else {
+          alert(data.error || "An error occurred while uploading the file."); // Handle error
+        }
+      } catch (error) {
+        console.error("Error uploading file:", error);
+        alert("An unexpected error occurred. Please try again."); // Notify the user
+      }
+    }
+  };
+
   return (
     <div className="container-fluid vh-100 d-flex flex-column">
-      <Header title="Paraphraser" />
+      <Header title="Paraphrazer" />
       <div className="d-flex align-items-center gap-2">
         <p>Style: </p>
         <button type="button" className="btn btn-outline-success">
@@ -45,16 +78,30 @@ function Paraphrizer() {
           Academic
         </button>
       </div>
-      <Textareas value="" onChange={handleSubmit} />
+      <Textareas text={userText} setText={setUserText} />
       <div className="d-flex align-items-center gap-2">
-        <button type="button" className="btn btn-outline-secondary">
+        <label htmlFor="upload-image" className="btn btn-outline-secondary">
           Upload Image
-        </button>
-        <button type="button" className="btn btn-outline-secondary">
+        </label>
+        <label htmlFor="upload-audio" className="btn btn-outline-secondary">
           Upload Audio
-        </button>
+        </label>
+        <input
+          id="upload-image"
+          style={{ display: 'none' }}
+          type="file"
+          className="btn btn-outline-secondary"
+          onChange={handleImageUpload}
+        />
+        <input
+          id="upload-audio"
+          style={{ display: 'none' }}
+          type="file"
+          className="btn btn-outline-secondary"
+          onChange={handleAudioUpload}
+        />
         <button type="button" className="btn btn-success">
-          Paraphrase
+          Paraphraze
         </button>
       </div>
 
