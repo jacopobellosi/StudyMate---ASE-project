@@ -49,7 +49,7 @@ function Summarizer() {
           className="btn btn-success"
           onClick={handleSubmit}
         >
-          Summarize
+          Summarise
         </button>
       </div>
 
