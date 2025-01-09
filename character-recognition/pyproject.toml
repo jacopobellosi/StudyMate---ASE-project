@@ -9,7 +9,6 @@ readme = "README.md"
 python = "^3.13"
 pytesseract = "^0.3.13"
 flask = "^3.1.0"
-flask-cors = "^5.0.0"
 
 
 [tool.poetry.group.dev.dependencies]

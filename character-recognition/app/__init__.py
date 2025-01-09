@@ -1,13 +1,11 @@
 from app.extractor import extract_text_from_image
 from flask import Flask, jsonify, request
-from flask_cors import CORS
 
 ALLOWED_EXTENSIONS = {"png", "jpg", "jpeg"}
 
 
 def create_app(test_config=None):
     app = Flask(__name__)
-    CORS(app)
     app.config["MAX_CONTENT_LENGTH"] = 16 * 1000 * 1000
 
     if test_config:

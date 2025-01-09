@@ -18,16 +18,9 @@ services:
       - app-network
 
   voice-transcription:
-    build: ./voice-transcription
+    build: ./voice-transcription  # This ensures the build context is set correctly
     ports:
       - "5003:8000"
-    networks:
-      - app-network
-
-  frontend:
-    build: ./frontend
-    ports:
-      - "3000:80"  # Map port 80 of the container to port 3000 on the host
     networks:
       - app-network
 
