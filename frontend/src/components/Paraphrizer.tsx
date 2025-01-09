@@ -6,7 +6,7 @@ const ParaphrizeProcessor: React.FC = () => {
   const handleAction = async (text: string): Promise<string> => {
     const requestData = { text, style: "standard" };
     try {
-      const response = await axios.post("http://localhost:5002/paraphrase", requestData);
+      const response = await axios.post("http://paraphrasing-tool:5000/paraphrase", requestData);
       return response.data.paraphrased_text;
     } catch (error) {
       console.error("Error communicating with the API:", error);

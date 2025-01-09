@@ -21,13 +21,13 @@ const TextProcessor: React.FC<TextProcessorProps> = ({ title, actionButtonText, 
       formData.append("file", file);
 
       try {
-        const response = await axios.post("http://localhost:5001/extract-text", formData, {
+        const response = await axios.post("http://character-recognition:5001/extract-text", formData, {
           headers: {
             "Content-Type": "multipart/form-data",
           },
         });
 
-        setText((prevText) => prevText + ' ' + response.data.extracted_text);
+        setText((prevText) => prevText + '\n\n' + response.data.extracted_text);
       } catch (error) {
         console.error("Error uploading file:", error);
         alert("An unexpected error occurred. Please try again.");
@@ -42,13 +42,13 @@ const TextProcessor: React.FC<TextProcessorProps> = ({ title, actionButtonText, 
       formData.append("file", file);
 
       try {
-        const response = await axios.post("http://localhost:5003/transcribe", formData, {
+        const response = await axios.post("http://voice-transcription:8000/transcribe", formData, {
           headers: {
             "Content-Type": "multipart/form-data",
           },
         });
 
-        setText((prevText) => prevText + ' ' +response.data.text);
+        setText((prevText) => prevText + '\n\n' + response.data.text);
       } catch (error) {
         console.error("Error uploading file:", error);
         alert("An unexpected error occurred. Please try again.");
