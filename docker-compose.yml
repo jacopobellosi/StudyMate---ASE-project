@@ -24,6 +24,15 @@ services:
     networks:
       - app-network
 
+  frontend:
+    build: ./frontend
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./frontend:/app
+    networks:
+      - app-network
+
 networks:
   app-network:
     driver: bridge
