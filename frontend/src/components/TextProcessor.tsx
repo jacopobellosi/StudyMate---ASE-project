@@ -7,23 +7,12 @@ import axios from "axios";
 interface TextProcessorProps {
   title: string;
   actionButtonText: string;
-  apiEndpoint: string;
+  handleAction: (text: string) => Promise<string>;
 }
 
-const TextProcessor: React.FC<TextProcessorProps> = ({ title, actionButtonText, apiEndpoint }) => {
+const TextProcessor: React.FC<TextProcessorProps> = ({ title, actionButtonText, handleAction }) => {
   const [text, setText] = useState("");
   const [resultText, setResultText] = useState("");
-
-  const handleSubmit = async () => {
-    const requestData = { text };
-
-    try {
-      const response = await axios.post(apiEndpoint, requestData);
-      setResultText(response.data);
-    } catch (error) {
-      console.error("Error communicating with the API:", error);
-    }
-  };
 
   const handleImageUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -32,19 +21,16 @@ const TextProcessor: React.FC<TextProcessorProps> = ({ title, actionButtonText, 
       formData.append("file", file);
 
       try {
-        const response = await fetch("http://localhost:5001/extract-text", {
-          method: "POST",
-          body: formData,
+        const response = await axios.post("http://localhost:5001/extract-text", formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
         });
 
-        const data = await response.json();
-        if (response.ok) {
-          setText((prevText) => prevText + data.extracted_text);
-        } else {
-          alert(data.error);
-        }
+        setText((prevText) => prevText + ' ' + response.data.extracted_text);
       } catch (error) {
         console.error("Error uploading file:", error);
+        alert("An unexpected error occurred. Please try again.");
       }
     }
   };
@@ -56,22 +42,23 @@ const TextProcessor: React.FC<TextProcessorProps> = ({ title, actionButtonText, 
       formData.append("file", file);
 
       try {
-        const response = await fetch("http://localhost:5003/transcribe", {
-          method: "POST",
-          body: formData,
+        const response = await axios.post("http://localhost:5003/transcribe", formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
         });
 
-        const data = await response.json();
-        if (response.ok) {
-          setText((prevText) => prevText + data.text);
-        } else {
-          alert(data.error || "An error occurred while uploading the file.");
-        }
+        setText((prevText) => prevText + ' ' +response.data.text);
       } catch (error) {
         console.error("Error uploading file:", error);
         alert("An unexpected error occurred. Please try again.");
       }
     }
+  };
+
+  const onActionClick = async () => {
+    const result = await handleAction(text); // Fetch result from API
+    setResultText(result); // Update resultText
   };
 
   return (
@@ -97,7 +84,7 @@ const TextProcessor: React.FC<TextProcessorProps> = ({ title, actionButtonText, 
           type="file"
           onChange={handleAudioUpload}
         />
-        <button type="button" className="btn btn-success" onClick={handleSubmit}>
+        <button type="button" className="btn btn-success" onClick={onActionClick}>
           {actionButtonText}
         </button>
       </div>

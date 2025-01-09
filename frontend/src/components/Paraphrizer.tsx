@@ -1,13 +1,27 @@
 import TextProcessor from "./TextProcessor";
+import axios from "axios";
+import React from "react";
 
-function Paraphrizer() {
+const ParaphrizeProcessor: React.FC = () => {
+  const handleAction = async (text: string): Promise<string> => {
+    const requestData = { text, style: "standard" };
+    try {
+      const response = await axios.post("http://localhost:5002/paraphrase", requestData);
+      return response.data.paraphrased_text;
+    } catch (error) {
+      console.error("Error communicating with the API:", error);
+      return 'An unexpected error occurred.';
+    }
+  };
+
   return (
     <TextProcessor
       title="Paraphrizer"
       actionButtonText="Paraphrase"
-      apiEndpoint="http://localhost:5002/paraphrase"
+      handleAction={handleAction}
     />
   );
-}
+};
 
-export default Paraphrizer;
+
+export default ParaphrizeProcessor;

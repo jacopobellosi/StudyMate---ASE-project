@@ -1,13 +1,19 @@
 import TextProcessor from "./TextProcessor";
+import React from "react";
 
-function Summarizer() {
+const SummarizeProcessor: React.FC = () => {
+  const handleAction = async (text: string): Promise<string> => {
+    return 'TODO Summarized text: ' + text;
+  };
+
   return (
     <TextProcessor
       title="Summarizer"
       actionButtonText="Summarize"
-      apiEndpoint="http://127.0.0.1:8000/summarize/"
+      handleAction={handleAction}
     />
   );
-}
+};
 
-export default Summarizer;
+
+export default SummarizeProcessor;
