@@ -21,7 +21,7 @@ const TextProcessor: React.FC<TextProcessorProps> = ({ title, actionButtonText, 
       formData.append("file", file);
 
       try {
-        const response = await axios.post("http://character-recognition:5001/extract-text", formData, {
+        const response = await axios.post("http://localhost:5001/extract-text", formData, {
           headers: {
             "Content-Type": "multipart/form-data",
           },
@@ -42,7 +42,7 @@ const TextProcessor: React.FC<TextProcessorProps> = ({ title, actionButtonText, 
       formData.append("file", file);
 
       try {
-        const response = await axios.post("http://voice-transcription:8000/transcribe", formData, {
+        const response = await axios.post("http://localhost:5003/transcribe", formData, {
           headers: {
             "Content-Type": "multipart/form-data",
           },
