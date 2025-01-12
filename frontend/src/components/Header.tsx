@@ -14,12 +14,12 @@ const Header = ({ title }: HeaderProps) => {
       <div className="col text-end">
         <button
           type="button"
-          className="btn btn-secondary mt-2 me-2"
+          className="btn btn-warning mt-2 me-2"
           onClick={() => {
-            navigate("/");
+            navigate("/authorization");
           }}
         >
-          Home
+          Login
         </button>
       </div>
     </div>

@@ -1,47 +1,83 @@
-import { useNavigate } from "react-router-dom";
 import Footer from "./Footer";
+import Header from "./Header";
+import Textareas from "./Textareas";
+import React, { useState } from "react";
 
-function Homescreen() {
-  let navigate = useNavigate();
+const Homescreen: React.FC = () => {
+  let title = "Study Companion";
+  const [text, setText] = useState("");
+  const [resultText, setResultText] = useState("");
+
   return (
-    <div className="container-fluid vh-100 d-flex flex-column gap-2">
-      <h1>CondenseAI</h1>
-      <p>The ultimate study companion</p>
-      <div className="d-flex flex-row align-items-start gap-2">
-        <button
-          type="button"
-          className="btn btn-warning"
-          onClick={() => {
-            navigate("/paraphrizer");
-          }}
-        >
-          Paraphrase
-        </button>
-        <button
-          type="button"
-          className="btn btn-warning"
-          onClick={() => {
-            navigate("/summarizer");
-          }}
-        >
-          Summarise
-        </button>
-      </div>
-      <br/>
-      <div className="d-flex flex-column align-items-middle gap-2">
-        <h5>Why Choose CondenseAI?</h5>
+    <div className="container-fluid vh-100 d-flex flex-column">
+      <Header title={title} />
+      <Textareas
+        text={text}
+        setText={setText}
+        resultText={resultText}
+        setResultText={setResultText}
+      />
+      <div className="d-flex mb-3 mt-2">
+        <div
+          style={{ flex: "1" }}
+          className="me-2 d-flex position-relative"
+        ></div>
+        <div style={{ flex: "2" }} className="me-2 d-flex position-relative">
+          <div className="btn-group dropend me-2">
+            <button
+              type="button"
+              className="btn btn-warning dropdown-toggle"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+            >
+              <i className="bi bi-magic"></i>
+            </button>
+            <ul className="dropdown-menu">
+              <li>
+                <a className="dropdown-item" href="#">
+                  Summarise
+                </a>
+              </li>
+              <li>
+                <a className="dropdown-item" href="#">
+                  Paraphrase
+                </a>
+              </li>
+            </ul>
+          </div>
 
-        <ul>
-          <li>Advanced AI models ensure high-quality results.</li>
-          <li>Multi-format support (text, audio, images).</li>
-          <li>User-friendly interface tailored for efficiency.</li>
-          <li>Secure and scalable infrastructure.</li>
-        </ul>
+          <div className="btn-group dropend">
+            <button
+              type="button"
+              className="btn btn-warning dropdown-toggle"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+            >
+              Add text from
+            </button>
+            <ul className="dropdown-menu">
+              <li>
+                <a className="dropdown-item" href="#">
+                  Image
+                </a>
+              </li>
+              <li>
+                <a className="dropdown-item" href="#">
+                  Audio
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div style={{ flex: "2" }} className="ms-2 d-flex justify-content-end">
+          <button type="button" className="btn btn-secondary">
+            Save as new note
+          </button>
+        </div>
       </div>
-      <div className="flex-grow-1"></div>
       <Footer />
     </div>
   );
-}
+};
 
 export default Homescreen;
