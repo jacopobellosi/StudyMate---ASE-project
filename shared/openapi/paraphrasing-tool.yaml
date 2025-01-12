@@ -1,0 +1,159 @@
+openapi: 3.1.0
+info:
+  title: Paraphrasing Tool API
+  version: 1.0.0
+paths:
+  /paraphrase:
+    post:
+      summary: Paraphrase text
+      requestBody:
+        required: true
+        content:
+          text/plain:
+            schema:
+              type: string
+              example: "This is a sample text to paraphrase."
+      responses:
+        '200':
+          description: Successful response
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: "An example text, rephrased."
+  /generate_test:
+    post:
+      summary: Generate test
+      requestBody:
+        required: true
+        content:
+          text/plain:
+            schema:
+              type: string
+              example: "This is a sample text to generate a test."
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AssessmentTest'
+components:
+  schemas:
+    ParaphraseRequest:
+      type: object
+      properties:
+        text:
+          type: string
+          example: "This is a sample text to be paraphrased."
+      required:
+        - text
+    ParaphraseResponse:
+      type: object
+      properties:
+        paraphrasedText:
+          type: string
+          example: "This is a rephrased sample text."
+      required:
+        - paraphrasedText
+    SimpleChoice:
+      type: object
+      properties:
+        identifier:
+          type: string
+        text:
+          type: string
+      required:
+        - identifier
+        - text
+    ChoiceInteraction:
+      type: object
+      properties:
+        response_identifier:
+          type: string
+        shuffle:
+          type: boolean
+        max_choices:
+          type: integer
+        prompt:
+          type: string
+        choices:
+          type: array
+          items:
+            $ref: '#/components/schemas/SimpleChoice'
+      required:
+        - response_identifier
+        - shuffle
+        - max_choices
+        - prompt
+        - choices
+    ResponseDeclaration:
+      type: object
+      properties:
+        identifier:
+          type: string
+        cardinality:
+          type: string
+        base_type:
+          type: string
+        correct_response:
+          type: array
+          items:
+            type: string
+      required:
+        - identifier
+        - cardinality
+        - base_type
+        - correct_response
+    Item:
+      type: object
+      properties:
+        identifier:
+          type: string
+        title:
+          type: string
+        response_declaration:
+          $ref: '#/components/schemas/ResponseDeclaration'
+        item_body:
+          $ref: '#/components/schemas/ChoiceInteraction'
+      required:
+        - identifier
+        - title
+        - response_declaration
+        - item_body
+    AssessmentSection:
+      type: object
+      properties:
+        identifier:
+          type: string
+        title:
+          type: string
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/Item'
+      required:
+        - identifier
+        - title
+        - items
+    AssessmentTest:
+      type: object
+      properties:
+        identifier:
+          type: string
+        title:
+          type: string
+        tool_name:
+          type: string
+        tool_version:
+          type: string
+        sections:
+          type: array
+          items:
+            $ref: '#/components/schemas/AssessmentSection'
+      required:
+        - identifier
+        - title
+        - tool_name
+        - tool_version
+        - sections
