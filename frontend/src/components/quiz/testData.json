@@ -1,0 +1,115 @@
+{
+    "identifier": "RavenCycleTest",
+    "title": "How well you know Raven Cycle by Maggie Stiefvater",
+    "tool_name": "QTI Authoring Tool",
+    "tool_version": "1.0",
+    "sections": [
+        {
+            "identifier": "section1",
+            "title": "Raven Cycle Quiz",
+            "items": [
+                {
+                    "identifier": "q1",
+                    "title": "What is the name of Blue Sargent's psychic family home?",
+                    "response_declaration": {
+                        "identifier": "RESPONSE",
+                        "cardinality": "single",
+                        "base_type": "identifier",
+                        "correct_response": [
+                            "c2"
+                        ]
+                    },
+                    "item_body": {
+                        "response_identifier": "RESPONSE",
+                        "shuffle": true,
+                        "max_choices": 1,
+                        "prompt": "What is the name of Blue Sargent's psychic family home?",
+                        "choices": [
+                            {
+                                "identifier": "c1",
+                                "text": "Cabeswater"
+                            },
+                            {
+                                "identifier": "c2",
+                                "text": "300 Fox Way"
+                            },
+                            {
+                                "identifier": "c3",
+                                "text": "The Greywaren"
+                            },
+                            {
+                                "identifier": "c4",
+                                "text": "Henrietta's Haven"
+                            }
+                        ]
+                    }
+                },
+                {
+                    "identifier": "q2",
+                    "title": "True or False: Gansey is searching for the tomb of Glendower.",
+                    "response_declaration": {
+                        "identifier": "RESPONSE",
+                        "cardinality": "single",
+                        "base_type": "boolean",
+                        "correct_response": [
+                            "true"
+                        ]
+                    },
+                    "item_body": {
+                        "response_identifier": "RESPONSE",
+                        "shuffle": false,
+                        "max_choices": 1,
+                        "prompt": "True or False: Gansey is searching for the tomb of Glendower.",
+                        "choices": [
+                            {
+                                "identifier": "true",
+                                "text": "True"
+                            },
+                            {
+                                "identifier": "false",
+                                "text": "False"
+                            }
+                        ]
+                    }
+                },
+                {
+                    "identifier": "q3",
+                    "title": "Which of the following are key themes in The Raven Cycle?",
+                    "response_declaration": {
+                        "identifier": "RESPONSE",
+                        "cardinality": "multiple",
+                        "base_type": "identifier",
+                        "correct_response": [
+                            "1",
+                            "2"
+                        ]
+                    },
+                    "item_body": {
+                        "response_identifier": "RESPONSE",
+                        "shuffle": true,
+                        "max_choices": 2,
+                        "prompt": "Which of the following are key themes in The Raven Cycle?",
+                        "choices": [
+                            {
+                                "identifier": "1",
+                                "text": "Friendship"
+                            },
+                            {
+                                "identifier": "2",
+                                "text": "Magic"
+                            },
+                            {
+                                "identifier": "3",
+                                "text": "Politics"
+                            },
+                            {
+                                "identifier": "4",
+                                "text": "War"
+                            }
+                        ]
+                    }
+                }
+            ]
+        }
+    ]
+}

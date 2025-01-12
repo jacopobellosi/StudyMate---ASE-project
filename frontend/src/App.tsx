@@ -4,7 +4,7 @@ import Paraphrizer from "./components/Paraphrizer";
 import Summarizer from "./components/Summarizer";
 import Docu from "./components/Docu";
 import About from "./components/About";
-import TextInputForm from './components/TextInputForm';
+import Quiz from "./components/quiz/Quiz";
 
 function App() {
   return (
@@ -15,7 +15,7 @@ function App() {
         <Route path="/summarizer" element={<Summarizer />} />
         <Route path="/docu" element={<Docu />} />
         <Route path="/about" element={<About />} />
-        <Route path="/generate-test" element={<TextInputForm />} />
+        <Route path="/quiz" element={<Quiz />} />
       </Routes>
     </Router>
   );
