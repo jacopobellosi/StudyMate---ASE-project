@@ -1,6 +1,6 @@
 import json
 
-from openapi_client.models.assessment_test import AssessmentTest
+from app.models import AssessmentTest
 
 # Now modify the test
 def test_parse_quiz_xml_to_models():
