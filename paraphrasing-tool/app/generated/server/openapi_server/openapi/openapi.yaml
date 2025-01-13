@@ -1,0 +1,362 @@
+openapi: 3.1.0
+info:
+  title: Paraphrasing Tool API
+  version: 1.0.0
+servers:
+- url: /
+paths:
+  /generate_test:
+    post:
+      operationId: generate_test_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/_generate_test_post_request'
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AssessmentTest'
+          description: Successful response
+      summary: Generate test
+      x-openapi-router-controller: openapi_server.controllers.default_controller
+  /paraphrase:
+    post:
+      operationId: paraphrase_post
+      requestBody:
+        content:
+          text/plain:
+            schema:
+              example: This is a sample text to paraphrase.
+              type: string
+        required: true
+      responses:
+        "200":
+          content:
+            text/plain:
+              schema:
+                example: "An example text, rephrased."
+                type: string
+          description: Successful response
+      summary: Paraphrase text
+      x-openapi-router-controller: openapi_server.controllers.default_controller
+components:
+  schemas:
+    ParaphraseRequest:
+      properties:
+        text:
+          example: This is a sample text to be paraphrased.
+          type: string
+      required:
+      - text
+    ParaphraseResponse:
+      properties:
+        paraphrasedText:
+          example: This is a rephrased sample text.
+          type: string
+      required:
+      - paraphrasedText
+    SimpleChoice:
+      example:
+        identifier: identifier
+        text: text
+      properties:
+        identifier:
+          title: identifier
+          type: string
+        text:
+          title: text
+          type: string
+      required:
+      - identifier
+      - text
+      title: SimpleChoice
+    ChoiceInteraction:
+      example:
+        response_identifier: response_identifier
+        max_choices: 0
+        shuffle: true
+        choices:
+        - identifier: identifier
+          text: text
+        - identifier: identifier
+          text: text
+        prompt: prompt
+      properties:
+        response_identifier:
+          title: response_identifier
+          type: string
+        shuffle:
+          title: shuffle
+          type: boolean
+        max_choices:
+          title: max_choices
+          type: integer
+        prompt:
+          title: prompt
+          type: string
+        choices:
+          items:
+            $ref: '#/components/schemas/SimpleChoice'
+          title: choices
+          type: array
+      required:
+      - choices
+      - max_choices
+      - prompt
+      - response_identifier
+      - shuffle
+      title: ChoiceInteraction
+    ResponseDeclaration:
+      example:
+        identifier: identifier
+        base_type: base_type
+        correct_response:
+        - correct_response
+        - correct_response
+        cardinality: cardinality
+      properties:
+        identifier:
+          title: identifier
+          type: string
+        cardinality:
+          title: cardinality
+          type: string
+        base_type:
+          title: base_type
+          type: string
+        correct_response:
+          items:
+            type: string
+          title: correct_response
+          type: array
+      required:
+      - base_type
+      - cardinality
+      - correct_response
+      - identifier
+      title: ResponseDeclaration
+    Item:
+      example:
+        identifier: identifier
+        item_body:
+          response_identifier: response_identifier
+          max_choices: 0
+          shuffle: true
+          choices:
+          - identifier: identifier
+            text: text
+          - identifier: identifier
+            text: text
+          prompt: prompt
+        title: title
+        response_declaration:
+          identifier: identifier
+          base_type: base_type
+          correct_response:
+          - correct_response
+          - correct_response
+          cardinality: cardinality
+      properties:
+        identifier:
+          title: identifier
+          type: string
+        title:
+          title: title
+          type: string
+        response_declaration:
+          $ref: '#/components/schemas/ResponseDeclaration'
+        item_body:
+          $ref: '#/components/schemas/ChoiceInteraction'
+      required:
+      - identifier
+      - item_body
+      - response_declaration
+      - title
+      title: Item
+    AssessmentSection:
+      example:
+        identifier: identifier
+        title: title
+        items:
+        - identifier: identifier
+          item_body:
+            response_identifier: response_identifier
+            max_choices: 0
+            shuffle: true
+            choices:
+            - identifier: identifier
+              text: text
+            - identifier: identifier
+              text: text
+            prompt: prompt
+          title: title
+          response_declaration:
+            identifier: identifier
+            base_type: base_type
+            correct_response:
+            - correct_response
+            - correct_response
+            cardinality: cardinality
+        - identifier: identifier
+          item_body:
+            response_identifier: response_identifier
+            max_choices: 0
+            shuffle: true
+            choices:
+            - identifier: identifier
+              text: text
+            - identifier: identifier
+              text: text
+            prompt: prompt
+          title: title
+          response_declaration:
+            identifier: identifier
+            base_type: base_type
+            correct_response:
+            - correct_response
+            - correct_response
+            cardinality: cardinality
+      properties:
+        identifier:
+          title: identifier
+          type: string
+        title:
+          title: title
+          type: string
+        items:
+          items:
+            $ref: '#/components/schemas/Item'
+          title: items
+          type: array
+      required:
+      - identifier
+      - items
+      - title
+      title: AssessmentSection
+    AssessmentTest:
+      example:
+        tool_name: tool_name
+        identifier: identifier
+        tool_version: tool_version
+        title: title
+        sections:
+        - identifier: identifier
+          title: title
+          items:
+          - identifier: identifier
+            item_body:
+              response_identifier: response_identifier
+              max_choices: 0
+              shuffle: true
+              choices:
+              - identifier: identifier
+                text: text
+              - identifier: identifier
+                text: text
+              prompt: prompt
+            title: title
+            response_declaration:
+              identifier: identifier
+              base_type: base_type
+              correct_response:
+              - correct_response
+              - correct_response
+              cardinality: cardinality
+          - identifier: identifier
+            item_body:
+              response_identifier: response_identifier
+              max_choices: 0
+              shuffle: true
+              choices:
+              - identifier: identifier
+                text: text
+              - identifier: identifier
+                text: text
+              prompt: prompt
+            title: title
+            response_declaration:
+              identifier: identifier
+              base_type: base_type
+              correct_response:
+              - correct_response
+              - correct_response
+              cardinality: cardinality
+        - identifier: identifier
+          title: title
+          items:
+          - identifier: identifier
+            item_body:
+              response_identifier: response_identifier
+              max_choices: 0
+              shuffle: true
+              choices:
+              - identifier: identifier
+                text: text
+              - identifier: identifier
+                text: text
+              prompt: prompt
+            title: title
+            response_declaration:
+              identifier: identifier
+              base_type: base_type
+              correct_response:
+              - correct_response
+              - correct_response
+              cardinality: cardinality
+          - identifier: identifier
+            item_body:
+              response_identifier: response_identifier
+              max_choices: 0
+              shuffle: true
+              choices:
+              - identifier: identifier
+                text: text
+              - identifier: identifier
+                text: text
+              prompt: prompt
+            title: title
+            response_declaration:
+              identifier: identifier
+              base_type: base_type
+              correct_response:
+              - correct_response
+              - correct_response
+              cardinality: cardinality
+      properties:
+        identifier:
+          title: identifier
+          type: string
+        title:
+          title: title
+          type: string
+        tool_name:
+          title: tool_name
+          type: string
+        tool_version:
+          title: tool_version
+          type: string
+        sections:
+          items:
+            $ref: '#/components/schemas/AssessmentSection'
+          title: sections
+          type: array
+      required:
+      - identifier
+      - sections
+      - title
+      - tool_name
+      - tool_version
+      title: AssessmentTest
+    _generate_test_post_request:
+      properties:
+        resource_text:
+          example: This is a sample text to generate a test.
+          title: resource_text
+          type: string
+      required:
+      - resource_text
+      title: _generate_test_post_request
