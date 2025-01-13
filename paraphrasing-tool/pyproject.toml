@@ -18,15 +18,11 @@ pydantic = ">=2"
 typing-extensions = ">=4.7.1"
 python-dotenv = "^1.0.1"
 openapi-server = {path = "app/generated/server"}
-connexion = {extras = ["flask"], version = "^3.2.0"}
-uvicorn = "^0.34.0"
 
 
 [tool.poetry.group.dev.dependencies]
 openapi-generator-cli = "^7.10.0.post0"
 pytest = "^8.3.4"
-deepdiff = "^8.1.1"
-devtools = "^0.12.2"
 
 [build-system]
 requires = ["poetry-core"]

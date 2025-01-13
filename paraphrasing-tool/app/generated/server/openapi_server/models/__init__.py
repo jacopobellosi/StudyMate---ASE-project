@@ -5,6 +5,7 @@ from openapi_server.models.assessment_test import AssessmentTest
 from openapi_server.models.choice_interaction import ChoiceInteraction
 from openapi_server.models.generate_test_post_request import GenerateTestPostRequest
 from openapi_server.models.item import Item
+from openapi_server.models.paraphrase_post_request import ParaphrasePostRequest
 from openapi_server.models.paraphrase_request import ParaphraseRequest
 from openapi_server.models.paraphrase_response import ParaphraseResponse
 from openapi_server.models.response_declaration import ResponseDeclaration

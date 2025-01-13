@@ -28,10 +28,9 @@ paths:
       operationId: paraphrase_post
       requestBody:
         content:
-          text/plain:
+          application/json:
             schema:
-              example: This is a sample text to paraphrase.
-              type: string
+              $ref: '#/components/schemas/_paraphrase_post_request'
         required: true
       responses:
         "200":
@@ -351,6 +350,19 @@ components:
       - tool_name
       - tool_version
       title: AssessmentTest
+    _paraphrase_post_request:
+      properties:
+        text:
+          example: This is a sample text to generate a test.
+          title: text
+          type: string
+        style:
+          example: standard
+          title: style
+          type: string
+      required:
+      - text
+      title: _paraphrase_post_request
     _generate_test_post_request:
       properties:
         resource_text:

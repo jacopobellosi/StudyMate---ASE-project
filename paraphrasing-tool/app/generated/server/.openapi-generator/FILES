@@ -17,6 +17,7 @@ openapi_server/models/base_model.py
 openapi_server/models/choice_interaction.py
 openapi_server/models/generate_test_post_request.py
 openapi_server/models/item.py
+openapi_server/models/paraphrase_post_request.py
 openapi_server/models/paraphrase_request.py
 openapi_server/models/paraphrase_response.py
 openapi_server/models/response_declaration.py
