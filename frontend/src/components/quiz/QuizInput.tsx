@@ -11,7 +11,7 @@ const QuizInput = () => {
   const handleGenerateTest = async () => {
     setLoading(true);
     try {
-      const response = await axios.post<AssessmentTest>("http://paraphrasing-tool:5000/generate_test", {
+      const response = await axios.post<AssessmentTest>("http://localhost:5002/generate_test", {
         text: inputText,
       });
       
