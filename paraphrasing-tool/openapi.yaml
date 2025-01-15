@@ -39,11 +39,11 @@ paths:
             schema:
               type: object
               properties:
-                resource_text:
+                text:
                   type: string
                   example: "This is a sample text to generate a test."
               required:
-                - resource_text
+                - text
       responses:
         '200':
           description: Successful response

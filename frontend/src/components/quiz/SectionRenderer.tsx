@@ -1,5 +1,5 @@
 import QuestionRenderer from "./QuestionRenderer";
-import { AssessmentSection, Item } from "../../../generated/api"; // Correct import path
+import { AssessmentSection, Item } from "../../clients/paraphrasing_tool";
 
 interface SectionRendererProps {
   section: AssessmentSection;

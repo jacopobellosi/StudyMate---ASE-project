@@ -1,9 +1,9 @@
 import { useState } from "react";
 import QuizRenderer from "./QuizRenderer";
-import testData from "./testData.json"; // The provided JSON file
+import { AssessmentTest } from "../../clients/paraphrasing_tool";
 
-const Quiz = () => {
-  const [responses, setResponses] = useState<{ [key: string]: string[] }>({}); // Track user responses
+const Quiz = ({ quizData }: { quizData: AssessmentTest }) => {
+  const [responses, setResponses] = useState<{ [key: string]: string[] }>({});
   const [submitted, setSubmitted] = useState(false);
 
   const handleResponseChange = (questionId: string, response: string[]) => {
@@ -18,7 +18,7 @@ const Quiz = () => {
     console.log("User Responses:", responses);
     setSubmitted(true); // Set submitted to true when the quiz is submitted
 
-    const correctAnswers = testData.sections.reduce((acc, section) => {
+    const correctAnswers = quizData.sections.reduce((acc, section) => {
       return acc + section.items.reduce((sectionAcc, question) => {
         const userAnswer = new Set(responses[question.identifier] || []);
         const correctAnswers = new Set(question.response_declaration.correct_response);
@@ -27,15 +27,15 @@ const Quiz = () => {
       }, 0);
     }, 0);
 
-    const totalQuestions = testData.sections.reduce((acc, section) => acc + section.items.length, 0);
+    const totalQuestions = quizData.sections.reduce((acc, section) => acc + section.items.length, 0);
     alert(`You got ${correctAnswers} out of ${totalQuestions} correct!`);
   };
 
   return (
     <div>
-      <h1>{testData.title}</h1>
+      <h1>{quizData.title}</h1>
       <QuizRenderer
-        test={testData}
+        test={quizData}
         responses={responses}
         onResponseChange={handleResponseChange}
         submitted={submitted}

@@ -1,5 +1,5 @@
 import SectionRenderer from "./SectionRenderer";
-import { AssessmentTest } from "../../../generated/api";
+import { AssessmentTest } from "../../clients/paraphrasing_tool";
 
 interface QuizRendererProps {
   test: AssessmentTest;

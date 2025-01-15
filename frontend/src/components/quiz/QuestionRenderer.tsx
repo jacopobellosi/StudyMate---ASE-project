@@ -1,4 +1,4 @@
-import { SimpleChoice, Item } from "../../../generated/api";
+import { SimpleChoice, Item } from "../../clients/paraphrasing_tool";
 
 interface QuestionRendererProps {
   question: Item;
