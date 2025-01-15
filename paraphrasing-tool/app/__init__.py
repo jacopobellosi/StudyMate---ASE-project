@@ -1,5 +1,8 @@
+import logging
 from flask import Flask
 from flask_cors import CORS
+
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 def create_app():
     # Initialize the Flask app
