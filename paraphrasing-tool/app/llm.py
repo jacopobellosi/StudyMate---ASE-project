@@ -1,8 +1,9 @@
+import json
 import logging
 import os
 from openai import OpenAI
 from pydantic import ValidationError
-from app.models import AssessmentTest, ParaphraseRequest, GenerateTestRequest
+from app.models import AssessmentSection, AssessmentTest, Item, ParaphraseRequest, GenerateTestRequest
 
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
@@ -32,12 +33,13 @@ def create_test_prompt(text: str, hints: str = "") -> str:
     base_prompt = (
         "Generate a quiz in JSON format with single/multiple/true or false questions based on SOURCE_TEXT."
         " Generate from 3 to 7 questions with 2 to 5 choices each."
-        " The fields name in JSON should be similar to QTI format."
-        " The identifiers of the choices must be numerical."
+        " The fields name in JSON should be similar to QTI format (see Example answer)."
+        " The identifiers of the choices must be numerical," 
+        " first choice in each question should be 1, second 2, etc."
         " The question text should be in the field 'prompt'."
         " Don't write any explanation, just provide the needed json."
         "\n\nExample answer: "
-        """{"identifier":"test1","title":"Sample Test","tool_name":"OpenAI","tool_version":"1.0","sections":[{"identifier":"section1","title":"Section 1","items":[{"identifier":"item1","title":"Item 1","response_declaration":{"identifier":"RESPONSE","cardinality":"single","base_type":"identifier","correct_response":["1"]},"item_body":{"response_identifier":"RESPONSE","shuffle":true,"max_choices":1,"prompt":"When is the New Year?","choices":[{"identifier":"1","text":"1 Januar"},{"identifier":"2","text":"1 March"}]}}]}]}"""
+        """{"title": "Sample Test", "items": [{"identifier": "item1", "title": "Item 1", "response_declaration": {"identifier": "RESPONSE", "cardinality": "single", "base_type": "identifier", "correct_response": ["1"]}, "item_body": {"response_identifier": "RESPONSE", "shuffle": true, "max_choices": 1, "prompt": "When is the New Year?", "choices": [{"identifier": "1", "text": "1 Januar"}, {"identifier": "2", "text": "1 March"}]}}]}"""
         f"\n\nSOURCE_TEXT: {text}"
     )
     return f"{hints}\n\n{base_prompt}" if hints else base_prompt
@@ -59,7 +61,29 @@ def attempt_generate_test(prompt: str, source_text: str, attempts: int = 3) -> A
         quiz_json = response.choices[0].message.content.strip().strip("```").strip("json")
         logging.info(f"Generated quiz: {quiz_json}")
         try:
-            return AssessmentTest.model_validate_json(quiz_json)
+            quiz_dict = json.loads(quiz_json)
+            quiz_title = quiz_dict.get("title", None)
+            if not quiz_title:
+                raise ValidationError([{"loc": "title", "msg": "Title is required"}])
+            
+            items = [Item(**item) for item in quiz_dict.get("items", [])]
+
+            section = AssessmentSection(
+                identifier="section1",
+                title="Section 1",
+                items=items,
+            )
+
+            quiz = AssessmentTest(
+                identifier=quiz_title.lower().replace(" ", "_"),
+                title=quiz_title,
+                tool_name="OpenAI",
+                tool_version="1.0",
+                sections=[section],
+            )
+
+            return quiz
+        
         except ValidationError as e:
             logging.error(f"Validation errors: {e.errors()}")
             if attempt < attempts - 1:
