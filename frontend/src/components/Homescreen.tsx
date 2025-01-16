@@ -9,11 +9,18 @@ const Homescreen: React.FC = () => {
   const [text, setText] = useState("");
   const [resultText, setResultText] = useState("");
   const imageInputRef = useRef<HTMLInputElement>(null);
+  const audioInputRef = useRef<HTMLInputElement>(null);
 
   // Function to trigger the file input dialog
   const triggerImageUpload = () => {
     if (imageInputRef.current) {
       imageInputRef.current.click();
+    }
+  };
+
+  const triggerAudioUpload = () => {
+    if (audioInputRef.current) {
+      audioInputRef.current.click();
     }
   };
 
@@ -44,6 +51,61 @@ const Homescreen: React.FC = () => {
     }
   };
 
+  const handleAudioUpload = async (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      const formData = new FormData();
+      formData.append("file", file);
+
+      try {
+        const response = await axios.post(
+          "http://voice-transcription:8000/transcribe",
+          formData,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          }
+        );
+
+        setText((prevText) => prevText + "\n\n" + response.data.text);
+      } catch (error) {
+        console.error("Error uploading file:", error);
+        alert("An unexpected error occurred. Please try again.");
+      }
+    }
+  };
+
+  const onSummariseClick = async () => {
+    const result = await summarise(text); // Fetch result from API
+    setResultText(result); // Update resultText
+  };
+
+  const onParaphraseClick = async () => {
+    const result = await paraphrase(text); // Fetch result from API
+    setResultText(result); // Update resultText
+  };
+
+  const summarise = async (text: string): Promise<string> => {
+    return "TODO Summarized text: " + text;
+  };
+
+  const paraphrase = async (text: string): Promise<string> => {
+    const requestData = { text, style: "standard" };
+    try {
+      const response = await axios.post(
+        "http://paraphrasing-tool:5000/paraphrase",
+        requestData
+      );
+      return response.data.paraphrased_text;
+    } catch (error) {
+      console.error("Error communicating with the API:", error);
+      return "An unexpected error occurred.";
+    }
+  };
+
   return (
     <div className="container-fluid vh-100 d-flex flex-column">
       <Header title={title} />
@@ -71,12 +133,20 @@ const Homescreen: React.FC = () => {
             </button>
             <ul className="dropdown-menu">
               <li>
-                <a className="dropdown-item" href="#">
+                <a
+                  className="dropdown-item"
+                  href="#"
+                  onClick={onSummariseClick}
+                >
                   Summarise
                 </a>
               </li>
               <li>
-                <a className="dropdown-item" href="#">
+                <a
+                  className="dropdown-item"
+                  href="#"
+                  onClick={onParaphraseClick}
+                >
                   Paraphrase
                 </a>
               </li>
@@ -106,7 +176,14 @@ const Homescreen: React.FC = () => {
                 </a>
               </li>
               <li>
-                <a className="dropdown-item" href="#">
+                <a
+                  className="dropdown-item"
+                  href="#"
+                  onClick={(e) => {
+                    e.preventDefault(); // Prevent default navigation behavior
+                    triggerAudioUpload(); // Trigger the file input dialog
+                  }}
+                >
                   Audio
                 </a>
               </li>
@@ -117,6 +194,13 @@ const Homescreen: React.FC = () => {
               style={{ display: "none" }}
               type="file"
               onChange={handleImageUpload} // Handle the file selection
+            />
+            <input
+              id="upload-audio"
+              ref={audioInputRef}
+              style={{ display: "none" }}
+              type="file"
+              onChange={handleAudioUpload}
             />
           </div>
         </div>
