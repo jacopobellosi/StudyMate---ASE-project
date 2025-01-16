@@ -38,7 +38,7 @@ function QuestionRenderer({ question, response = [], onResponseChange, submitted
     <div style={{ paddingBottom: "20px" }}>
       <h4>{question.item_body.prompt}</h4>
       {choices.map((choice: SimpleChoice) => (
-        <label key={choice.identifier} style={{ display: "block" }}>
+        <label key={choice.identifier} style={{ display: "block", backgroundColor: "#fff", borderRadius: "8px", boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)", padding: "10px", marginBottom: "10px", position: "relative", paddingLeft: "35px" }}>
           <input
             type={isMultiple ? "checkbox" : "radio"}
             name={question.identifier}
@@ -46,6 +46,7 @@ function QuestionRenderer({ question, response = [], onResponseChange, submitted
             checked={response.includes(choice.identifier)}
             onChange={() => handleChange(choice.identifier)}
             disabled={submitted}
+            style={{ marginRight: "10px", position: "absolute", left: "10px", top: "50%", transform: "translateY(-50%)" }}
           />
           {choice.text}
         </label>

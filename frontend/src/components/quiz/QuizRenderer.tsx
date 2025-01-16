@@ -11,7 +11,7 @@ interface QuizRendererProps {
 
 const QuizRenderer = ({ test, responses, onResponseChange, submitted, displaySectionTitle = false }: QuizRendererProps) => {
   return (
-    <div>
+    <div style={{ backgroundColor: "#f5f5f5", padding: "20px" }}>
       {test.sections.map((section) => (
         <SectionRenderer
           key={section.identifier}

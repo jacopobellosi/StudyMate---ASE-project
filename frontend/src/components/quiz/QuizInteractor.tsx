@@ -5,6 +5,7 @@ import { AssessmentTest } from "../../clients/paraphrasing_tool";
 const Quiz = ({ quizData }: { quizData: AssessmentTest }) => {
   const [responses, setResponses] = useState<{ [key: string]: string[] }>({});
   const [submitted, setSubmitted] = useState(false);
+  const [scoreSummary, setScoreSummary] = useState<string | null>(null);
 
   const handleResponseChange = (questionId: string, response: string[]) => {
     console.log(`User chose option ${response} for question ${questionId}`);
@@ -28,11 +29,12 @@ const Quiz = ({ quizData }: { quizData: AssessmentTest }) => {
     }, 0);
 
     const totalQuestions = quizData.sections.reduce((acc, section) => acc + section.items.length, 0);
-    alert(`You got ${correctAnswers} out of ${totalQuestions} correct!`);
+    const message = `You got ${correctAnswers} out of ${totalQuestions} correct!`;
+    setScoreSummary(message);
   };
 
   return (
-    <div>
+    <div style={{ backgroundColor: "#f5f5f5", minHeight: "100vh", padding: "20px" }}>
       <h1>{quizData.title}</h1>
       <QuizRenderer
         test={quizData}
@@ -40,7 +42,20 @@ const Quiz = ({ quizData }: { quizData: AssessmentTest }) => {
         onResponseChange={handleResponseChange}
         submitted={submitted}
       />
-      <button onClick={handleSubmit}>Submit</button>
+      {scoreSummary && (
+        <div style={{ backgroundColor: "#fff", borderRadius: "8px", boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)", padding: "20px", marginBottom: "20px" }}>
+          <h2>Quiz Completed!</h2>
+          <p>{scoreSummary}</p>
+          <p>Great job! 🎉</p>
+        </div>
+      )}
+      <button
+        className="btn btn-warning"
+        onClick={handleSubmit}
+        style={{ marginTop: "20px" }}
+      >
+        Submit
+      </button>
     </div>
   );
 };
