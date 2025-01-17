@@ -11,6 +11,7 @@ services:
 
   paraphrasing-tool:
     build: ./paraphrasing-tool
+    container_name: paraphraser
     ports:
       - "5002:5000"
     volumes:
