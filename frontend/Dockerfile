@@ -1,4 +1,3 @@
-# Use Node.js 22 as the base image for building the app
 FROM node:22 AS build
 
 # Set the working directory
@@ -16,11 +15,13 @@ COPY . .
 # Build the application
 RUN npm run build
 
-# Use Nginx as a lightweight production server
 FROM nginx:alpine
 
 # Copy the build output to Nginx's static files directory
 COPY --from=build /app/dist /usr/share/nginx/html
+
+# Copy the Nginx configuration file
+COPY nginx.conf /etc/nginx/conf.d/default.conf
 
 # Expose port 80 for the web server
 EXPOSE 80

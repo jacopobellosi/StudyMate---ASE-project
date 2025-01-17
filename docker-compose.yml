@@ -27,7 +27,7 @@ services:
   frontend:
     build: ./frontend
     ports:
-      - "3000:80"  # Map port 80 of the container to port 3000 on the host
+      - "3000:80"
     networks:
       - app-network
 
