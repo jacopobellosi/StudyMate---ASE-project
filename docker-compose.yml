@@ -1,6 +1,7 @@
 services:
   character-recognition:
     build: ./character-recognition
+    container_name: character-recognition
     ports:
       - "5001:5001"
     volumes:
