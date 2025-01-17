@@ -5,7 +5,7 @@ import Summarizer from "./components/Summarizer";
 import Docu from "./components/Docu";
 import About from "./components/About";
 import Register from "./components/AuthenticationPage";
-import Login from "./components/Login";
+import Login from "./components/AuthenticationPage";
 
 function App() {
   return (

@@ -42,7 +42,7 @@
   }
   
   a {
-    color: #333;
+    color: black; /* Changed color to yellow */
     font-size: 14px;
     text-decoration: none;
     margin: 15px 0;
@@ -50,9 +50,9 @@
   
   button {
     border-radius: 20px;
-    border: 1px solid #ff4b2b;
-    background-color: #ff4b2b;
-    color: #ffffff;
+    border: 1px solid black;
+    background-color: #ffc107;
+    color: black; /* Changed color to yellow */
     font-size: 12px;
     font-weight: bold;
     padding: 12px 45px;
@@ -165,9 +165,9 @@
   }
   
   .overlay {
-    background: #ff416c;
-    background: -webkit-linear-gradient(to right, #ff4b2b, #ff416c);
-    background: linear-gradient(to right, #ff4b2b, #ff416c);
+    background: #ffc107;
+    background: -webkit-linear-gradient(to right, #ffc107, #ffc107);
+    background: linear-gradient(to right, #ffc107, #ffc107);
     background-repeat: no-repeat;
     background-size: cover;
     background-position: 0 0;
