@@ -1,7 +1,9 @@
-FROM nginx:alpine
+# Use the official Nginx image as a base
+FROM nginx:latest
 
-# might be removed?
-RUN rm /etc/nginx/conf.d/default.conf
-
-# Copy custom configuration file
+# Copy your Nginx configuration into the container
 COPY nginx.conf /etc/nginx/nginx.conf
+
+EXPOSE 5554
+
+# CMD ["nginx", "-g", "daemon off;"]

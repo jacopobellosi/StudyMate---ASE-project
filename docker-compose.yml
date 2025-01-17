@@ -19,8 +19,16 @@ services:
 
   voice-transcription:
     build: ./voice-transcription
+    container_name: voice-transcription
     ports:
       - "5003:8000"
+    networks:
+      - app-network
+
+  api-gateway:
+    build: ./api-gateway
+    ports:
+      - "5555:5554"
     networks:
       - app-network
 
