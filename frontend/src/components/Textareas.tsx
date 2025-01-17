@@ -1,13 +1,13 @@
-import { useState } from "react";
+import React from "react";
 
 interface TextareasProps {
-  value: string;
-  onChange: (value: string) => void;
+  text: string;
+  setText: React.Dispatch<React.SetStateAction<string>>;
+  resultText: string;
+  setResultText: React.Dispatch<React.SetStateAction<string>>;
 }
 
-const Textareas = ({ value, onChange }: TextareasProps) => {
-  const [text, setText] = useState("");
-
+const Textareas: React.FC<TextareasProps> = ({ text, setText, resultText, setResultText }) => {
   const handleClear = () => {
     setText("");
   };
@@ -19,31 +19,29 @@ const Textareas = ({ value, onChange }: TextareasProps) => {
           <textarea
             className="form-control h-100"
             id="input"
-            placeholder="To rewrite text, enter or paste it here and press Paraphrase"
+            placeholder="Enter or paste text here"
             style={{ resize: "none" }}
-            value={text} // Bind the value to the state
-            onChange={(e) => setText(e.target.value)} // Update state on change
+            value={text}
+            onChange={(e) => setText(e.target.value)}
           />
-
           <div
             className="position-absolute top-0 end-0 mt-2 me-2 bg-light p-1"
             style={{ cursor: "pointer", fontSize: "1em" }}
-            onClick={handleClear} // Add click handler
+            onClick={handleClear}
           >
             <i className="bi bi-x-circle"></i>
           </div>
         </div>
       </div>
-
       <div className="w-50 ms-2 d-flex">
         <div data-mdb-input-init className="form-outline flex-grow-1">
           <textarea
             className="form-control h-100"
             id="output"
-            readOnly
+            placeholder="Result will appear here"
             style={{ resize: "none" }}
-            value={value}
-            onChange={(e) => onChange(e.target.value)} // Call the onChange function with the new value
+            value={resultText}
+            onChange={(e) => setResultText(e.target.value)}
           />
         </div>
       </div>

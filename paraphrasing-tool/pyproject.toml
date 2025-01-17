@@ -1,24 +1,21 @@
 [tool.poetry]
-name = "character-recognition"
+name = "paraphrasing-tool"
 version = "0.1.0"
 description = ""
-authors = ["Arina Iusupova"]
+authors = [""]
 readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "^3.13"
-pytesseract = "^0.3.13"
 flask = "^3.1.0"
+openai = "^1.59.7"
+gunicorn = "^23.0.0"
 flask-cors = "^5.0.0"
+python-dotenv = "^1.0.1"
 
 
 [tool.poetry.group.dev.dependencies]
-black = "^24.10.0"
-flake8 = "^7.1.1"
-isort = "^5.13.2"
-pytest = "^8.3.3"
-pytest-cov = "^6.0.0"
-pre-commit = "^4.0.1"
+pytest = "^8.3.4"
 
 [build-system]
 requires = ["poetry-core"]
