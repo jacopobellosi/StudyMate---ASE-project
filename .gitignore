@@ -1,8 +1,0 @@
-__pycache__/
-*.pyc
-*.pyo
-*.pyd
-*.db
-.pytest_cache/
-.vscode/
-.DS_Store
