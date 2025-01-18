@@ -33,4 +33,8 @@ def test_invalid_endpoint():
     response = requests.get(f"{BASE_URL}/nonexistent")
     assert response.status_code == 404
 
-test_post_endpoint()
+if __name__ == "__main__":
+    test_get_root()
+    test_post_endpoint()
+    test_invalid_endpoint()
+    print("All tests passed!")
