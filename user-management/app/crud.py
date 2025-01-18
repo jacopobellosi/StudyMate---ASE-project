@@ -1,3 +1,4 @@
+import bcrypt
 from sqlalchemy.orm import Session
 from . import models, schemas
 
@@ -9,9 +10,14 @@ def get_user_by_id(db: Session, user_id: int):
 def get_user_by_username(db: Session, username: str):
     return db.query(models.User).filter(models.User.username == username).first()
 
+#get user by email
+def get_user_by_email(db: Session, email: str):
+    return db.query(models.User).filter(models.User.email == email).first()
+
 
 def create_user(db: Session, user: schemas.UserCreate):
-    db_user = models.User(**user.dict())
+    hashed_password = bcrypt.hashpw(user.password.encode('utf-8'), bcrypt.gensalt())
+    db_user = models.User(**user.dict(), password=hashed_password.decode('utf-8'))
     db.add(db_user)
     db.commit()
     db.refresh(db_user)
@@ -75,3 +81,8 @@ def list_summaries_for_user(db: Session, user_id: int):
         .filter(models.SummaryHistory.user_id == user_id)
         .all()
     )
+
+
+def verify_password(plain_password: str, hashed_password: str) -> bool:
+    return bcrypt.checkpw(plain_password.encode('utf-8'), hashed_password.encode('utf-8'))
+

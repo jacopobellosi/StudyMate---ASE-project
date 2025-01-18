@@ -1,7 +1,6 @@
 import React from "react";
-function SignUpForm() {
+function SignInForm() {
   const [state, setState] = React.useState({
-    name: "",
     email: "",
     password: ""
   });
@@ -16,11 +15,9 @@ function SignUpForm() {
   const handleOnSubmit = (evt: React.FormEvent<HTMLFormElement>) => {
     evt.preventDefault();
 
-    const { name, email, password } = state;
-    alert(
-      `You are sign up with name: ${name} email: ${email} and password: ${password}`
-    );
-
+    const { email, password } = state;
+    alert(`You are register with email: ${email} and password: ${password}`);
+    //API CALL TO LOGIN USER
     for (const key in state) {
       setState({
         ...state,
@@ -30,35 +27,29 @@ function SignUpForm() {
   };
 
   return (
-    <div className="form-container sign-up-container">
+    <div className="form-container sign-in-container">
       <form onSubmit={handleOnSubmit}>
-        <h1>Create Account</h1>
-        <span>use your email for registration</span>
-        <input
-          type="text"
-          name="name"
-          value={state.name}
-          onChange={handleChange}
-          placeholder="Name"
-        />
+        <h1>Sign in</h1>
+        <span>Enter your credentials</span>
         <input
           type="email"
+          placeholder="Email"
           name="email"
           value={state.email}
           onChange={handleChange}
-          placeholder="Email"
         />
         <input
           type="password"
           name="password"
+          placeholder="Password"
           value={state.password}
           onChange={handleChange}
-          placeholder="Password"
         />
-        <button>Sign Up</button>
+        <a href="#">Forgot your password?</a>
+        <button>Sign In</button>
       </form>
     </div>
   );
 }
 
-export default SignUpForm;
+export default SignInForm;

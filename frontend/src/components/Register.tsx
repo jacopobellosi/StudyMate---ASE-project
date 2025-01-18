@@ -1,9 +1,13 @@
 import React from "react";
-function SignInForm() {
+import axios from "axios";
+
+function SignUpForm() {
   const [state, setState] = React.useState({
+    name: "",
     email: "",
     password: ""
   });
+
   const handleChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
     const value = evt.target.value;
     setState({
@@ -12,11 +16,24 @@ function SignInForm() {
     });
   };
 
-  const handleOnSubmit = (evt: React.FormEvent<HTMLFormElement>) => {
+  const handleOnSubmit = async (evt: React.FormEvent<HTMLFormElement>) => {
     evt.preventDefault();
 
-    const { email, password } = state;
-    alert(`You are login with email: ${email} and password: ${password}`);
+    const { name, email, password } = state;
+
+    try {
+      const response = await axios.post(`http://127.0.0.1:5000/users/?username=${name}&email=${email}&password=${password}`);
+      alert(`User registered with ID: ${response.data.id}`);
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        const errorMessage = Array.isArray(error.response?.data?.detail)
+          ? error.response.data.detail.map((err: any) => err.msg).join(", ")
+          : error.response?.data?.detail || error.message;
+        alert(`Error registering user: ${errorMessage}`);
+      } else {
+        alert(`Error registering user: ${(error as Error).message}`);
+      }
+    }
 
     for (const key in state) {
       setState({
@@ -27,29 +44,35 @@ function SignInForm() {
   };
 
   return (
-    <div className="form-container sign-in-container">
+    <div className="form-container sign-up-container">
       <form onSubmit={handleOnSubmit}>
-        <h1>Sign in</h1>
-        <span>Enter your credentials</span>
+        <h1>Create Account</h1>
+        <span>use your email for registration</span>
+        <input
+          type="text"
+          name="name"
+          value={state.name}
+          onChange={handleChange}
+          placeholder="Name"
+        />
         <input
           type="email"
-          placeholder="Email"
           name="email"
           value={state.email}
           onChange={handleChange}
+          placeholder="Email"
         />
         <input
           type="password"
           name="password"
-          placeholder="Password"
           value={state.password}
           onChange={handleChange}
+          placeholder="Password"
         />
-        <a href="#">Forgot your password?</a>
-        <button>Sign In</button>
+        <button>Sign Up</button>
       </form>
     </div>
   );
 }
 
-export default SignInForm;
+export default SignUpForm;

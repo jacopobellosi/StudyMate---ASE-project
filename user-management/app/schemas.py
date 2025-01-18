@@ -6,14 +6,13 @@ from typing import List, Optional
 class UserBase(BaseModel):
     username: str
     email: str
-    full_name: str
-    bio: Optional[str] = None
     profile_pic: Optional[str] = None
 
 
 class UserCreate(UserBase):
-    pass
-
+    password: str
+    email: str
+    username: str
 
 class UserRead(UserBase):
     id: int

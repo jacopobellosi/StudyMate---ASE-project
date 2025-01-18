@@ -10,10 +10,9 @@ class User(Base):
     id = Column(Integer, primary_key=True, index=True)
     username = Column(String, unique=True, index=True)
     email = Column(String, unique=True, index=True)
-    full_name = Column(String)
-    bio = Column(Text, nullable=True)
     profile_pic = Column(String, nullable=True)
     signup_date = Column(DateTime, default=datetime.utcnow)
+    password = Column(String, nullable=False)
 
     # Relationships
     chat_sessions = relationship("ChatSession", back_populates="user")
