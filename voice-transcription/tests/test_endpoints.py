@@ -13,15 +13,24 @@ def test_get_root():
     assert response.json() == "Transcriptify running..."
 
 def test_post_endpoint():
-    payload = {"name": "Test Item"}
-    response = requests.post(f"{BASE_URL}/items", json=payload)
-    assert response.status_code == 201
-    response_data = response.json()
-    assert response_data["name"] == "Test Item"
-    assert "id" in response_data  # Assuming the response contains an ID
+    # Path to the file you want to upload
+    file_path = "./test_tracks/test.wav"
+
+    # Open the file in binary mode
+    with open(file_path, "rb") as file:
+        # Use the `files` parameter to attach the file
+        files = {"file": file}
+        response = requests.post(f"{BASE_URL}/transcribe", files=files)
+
+    responsejson = response.json()
+
+    # Assertions
+    assert response.status_code == 200
+    assert responsejson["status"] == "success"
+    assert "text" in responsejson
 
 def test_invalid_endpoint():
     response = requests.get(f"{BASE_URL}/nonexistent")
     assert response.status_code == 404
 
-test_invalid_endpoint()
+test_post_endpoint()

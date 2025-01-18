@@ -62,10 +62,9 @@ This microservice uses (but doesn't distribute) FFmpeg for converting audio form
 
 ## TODO
 
-- frontend integration
 - take params for language and model size as input
 - unit testing using pytest
-- code documentation
+- ~~code documentation~~
 - github precommits
 - ~~black~~
 - ~~poetry~~
