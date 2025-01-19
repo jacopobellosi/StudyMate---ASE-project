@@ -13,7 +13,7 @@ app = FastAPI()
 # Add CORS middleware
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Adjust this to the specific origins you want to allow
+    allow_origins=["http://localhost:5173"],  # Adjust this to the specific origins you want to allow
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -30,6 +30,13 @@ def create_user(email: str, username: str, password: str, db: Session = Depends(
         raise HTTPException(status_code=400, detail="Email already registered")
     user = schemas.UserCreate(email=email, username=username, password=password)
     return crud.create_user(db=db, user=user)
+
+@app.post("/users/login/")
+def login_user(email: str, password: str, db: Session = Depends(get_db)):
+    if not crud.authenticate_user(db, email, password):
+        raise HTTPException(status_code=400, detail="Invalid email or password")
+    db_user = crud.get_user_by_email(db, email=email)
+    return {"message": "Login successful", "user_id": db_user.id}
 
 @app.get("/users/{user_id}", response_model=schemas.UserRead)
 def read_user(user_id: int, db: Session = Depends(get_db)):

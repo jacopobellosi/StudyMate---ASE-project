@@ -1,5 +1,6 @@
 import React from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 function SignUpForm() {
   const [state, setState] = React.useState({
@@ -7,6 +8,8 @@ function SignUpForm() {
     email: "",
     password: ""
   });
+  const [errorMessage, setErrorMessage] = React.useState("");
+  const navigate = useNavigate();
 
   const handleChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
     const value = evt.target.value;
@@ -23,15 +26,16 @@ function SignUpForm() {
 
     try {
       const response = await axios.post(`http://127.0.0.1:5000/users/?username=${name}&email=${email}&password=${password}`);
-      alert(`User registered with ID: ${response.data.id}`);
+      setErrorMessage(""); // Clear error message
+      navigate("/"); // Redirect to home page
     } catch (error) {
       if (axios.isAxiosError(error)) {
         const errorMessage = Array.isArray(error.response?.data?.detail)
           ? error.response.data.detail.map((err: any) => err.msg).join(", ")
           : error.response?.data?.detail || error.message;
-        alert(`Error registering user: ${errorMessage}`);
+        setErrorMessage(`Error registering user: ${errorMessage}`);
       } else {
-        alert(`Error registering user: ${(error as Error).message}`);
+        setErrorMessage(`Error registering user: ${(error as Error).message}`);
       }
     }
 
@@ -69,6 +73,7 @@ function SignUpForm() {
           onChange={handleChange}
           placeholder="Password"
         />
+        {errorMessage && <p style={{ color: "red" }}>{errorMessage}</p>}
         <button>Sign Up</button>
       </form>
     </div>
