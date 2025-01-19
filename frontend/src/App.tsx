@@ -8,7 +8,7 @@ import About from "./components/About";
 import Register from "./components/AuthenticationPage";
 import Login from "./components/AuthenticationPage";
 import QuizInput from "./components/quiz/QuizInput";
-
+import Profile from "./components/Profile";
 
 function App() {
   return (
@@ -23,6 +23,7 @@ function App() {
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
         <Route path="/quiz" element={<QuizInput />} />
+        <Route path="/profile" element={<Profile />} />
       </Routes>
     </Router>
   );

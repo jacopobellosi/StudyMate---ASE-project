@@ -12,7 +12,7 @@ def get_user_by_email(db: Session, email: str):
     return db.query(models.User).filter(models.User.email == email).first()
 
 def create_user(db: Session, user: schemas.UserCreate):
-    user.password = get_password_hash(user.password)
+    #user.password = get_password_hash(user.password)
     db_user = models.User(**user.dict())
     db.add(db_user)
     db.commit()
@@ -79,7 +79,7 @@ def authenticate_user(db: Session, email: str, password: str):
     #    return False
     if user.password != password:
         return False
-    return True
+    return user
 
 def get_password_hash(password: str) -> str:
     return bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')

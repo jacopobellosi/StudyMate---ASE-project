@@ -27,6 +27,17 @@ function SignUpForm() {
     try {
       const response = await axios.post(`http://127.0.0.1:5000/users/?username=${name}&email=${email}&password=${password}`);
       setErrorMessage(""); // Clear error message
+
+      const formData = new URLSearchParams();
+      formData.append("username", email);
+      formData.append("password", password);
+
+      const tokenResponse = await axios.post(`http://127.0.0.1:5000/token`, formData, {
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded"
+        }
+      });
+      localStorage.setItem("token", tokenResponse.data.access_token); // Store token in local storage
       navigate("/"); // Redirect to home page
     } catch (error) {
       if (axios.isAxiosError(error)) {

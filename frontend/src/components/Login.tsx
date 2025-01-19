@@ -24,8 +24,17 @@ function SignInForm() {
     const { email, password } = state;
 
     try {
-      const response = await axios.post(`http://127.0.0.1:5000/users/login/?email=${email}&password=${password}`);
+      const formData = new URLSearchParams();
+      formData.append("username", email);
+      formData.append("password", password);
+
+      const response = await axios.post(`http://127.0.0.1:5000/token`, formData, {
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded"
+        }
+      });
       setErrorMessage(""); // Clear error message
+      localStorage.setItem("token", response.data.access_token); // Store token in local storage
       navigate("/"); // Redirect to home page
     } catch (error) {
       if (axios.isAxiosError(error)) {
