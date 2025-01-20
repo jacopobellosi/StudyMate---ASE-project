@@ -25,7 +25,8 @@ This project uses black as code formatter, to run the formatter:
 For automating endpoint tests, pytest was used and tests can be found on `./tests/test_endpoints.py`
 **To run the tests:**
 - If server is running locally: `cd` to `tests` directory, then run `pytest -v`
-- If running a docker image: `docker run --rm character-recognition bash -c "poetry run pytest tests"`
+- OR, run the docker image: `docker run -d -p 8000:8000 --name transcriptify voice-transcription:latest`
+then test it as such `docker exec transcriptify bash -c "sleep 90; poetry run pytest -v tests"`
 
 Also, `Postman` is used as follows:
 
@@ -75,3 +76,6 @@ This microservice uses (but doesn't distribute) FFmpeg for converting audio form
 - ~~poetry~~
 - ~~maybe docker~~
 - ~~standardize file input format~~
+
+#### CI Triggers
+This line is meant to trigger CI to test it in action.

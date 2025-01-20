@@ -12,9 +12,26 @@ def test_get_root():
     assert response.status_code == 200
     assert response.json() == "Transcriptify running..."
 
-def test_post_endpoint():
+def test_post_endpoint_wav():
     # Path to the file you want to upload
-    file_path = "./test_tracks/test.wav"
+    file_path = "./tests/test_tracks/test.wav"
+
+    # Open the file in binary mode
+    with open(file_path, "rb") as file:
+        # Use the `files` parameter to attach the file
+        files = {"file": file}
+        response = requests.post(f"{BASE_URL}/transcribe", files=files)
+
+    responsejson = response.json()
+
+    # Assertions
+    assert response.status_code == 200
+    assert responsejson["status"] == "success"
+    assert "text" in responsejson
+
+def test_post_endpoint_ogg():
+    # Path to the file you want to upload
+    file_path = "./tests/test_tracks/apollo_first_step.ogg"
 
     # Open the file in binary mode
     with open(file_path, "rb") as file:
