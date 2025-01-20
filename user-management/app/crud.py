@@ -1,6 +1,6 @@
 import bcrypt
 from sqlalchemy.orm import Session
-from . import models, schemas
+import models, schemas
 
 def get_user_by_id(db: Session, user_id: int):
     return db.query(models.User).filter(models.User.id == user_id).first()

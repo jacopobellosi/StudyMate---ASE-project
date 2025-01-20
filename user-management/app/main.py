@@ -5,8 +5,8 @@ from sqlalchemy.orm import Session
 from datetime import datetime, timedelta
 from jose import JWTError, jwt
 
-from .database import Base, engine, get_db
-from . import crud, schemas
+from database import Base, engine, get_db
+import crud, schemas
 from typing import List, Optional
 
 # Secret key to encode and decode JWT tokens
