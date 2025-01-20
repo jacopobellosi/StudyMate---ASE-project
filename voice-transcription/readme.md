@@ -25,7 +25,7 @@ This project uses black as code formatter, to run the formatter:
 For automating endpoint tests, pytest was used and tests can be found on `./tests/test_endpoints.py`
 **To run the tests:**
 - If server is running locally: `cd` to `tests` directory, then run `pytest -v`
-- If running a docker image: `docker run --rm character-recognition bash -c "poetry run pytest tests"`
+- If running a docker image: `docker run --rm voice-transcription bash -c "poetry run pytest tests"`
 
 Also, `Postman` is used as follows:
 
