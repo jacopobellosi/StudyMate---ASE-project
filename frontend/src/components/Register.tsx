@@ -26,6 +26,7 @@ function SignUpForm() {
 
     try {
       const response = await axios.post(`http://127.0.0.1:5000/users/?username=${name}&email=${email}&password=${password}`);
+      console.log(response.data);
       setErrorMessage(""); // Clear error message
 
       const formData = new URLSearchParams();
