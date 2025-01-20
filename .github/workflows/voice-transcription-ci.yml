@@ -1,0 +1,29 @@
+name: Python application
+
+on:
+  push:
+    paths:
+      - 'voice-transcription/**'
+  pull_request:
+    paths:
+      - 'voice-transcription/**'
+
+permissions:
+  contents: read
+
+jobs:
+  lint-format-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v3
+
+      - name: Build Docker Image
+        run: docker build -t voice-transcription:latest ./voice-transcription
+
+      - name: Run Server
+        run: docker run -d -p 8000:8000 --name transcriptify voice-transcription:latest
+        
+      - name: Run Tests
+        run: docker exec transcriptify bash -c "sleep 90; poetry run pytest -v tests"
