@@ -4,26 +4,18 @@ import Paraphrizer from "./components/Paraphrizer";
 import Summarizer from "./components/Summarizer";
 import Docu from "./components/Docu";
 import About from "./components/About";
-
-import Register from "./components/AuthenticationPage";
-import Login from "./components/AuthenticationPage";
-import QuizInput from "./components/quiz/QuizInput";
-import Profile from "./components/Profile";
+import Authorization from "./components/Authorization";
 
 function App() {
   return (
     <Router>
       <Routes>
         <Route path="/" element={<Homescreen />} />
+        <Route path="/authorization" element={<Authorization />} />
         <Route path="/paraphrizer" element={<Paraphrizer />} />
         <Route path="/summarizer" element={<Summarizer />} />
         <Route path="/docu" element={<Docu />} />
         <Route path="/about" element={<About />} />
-
-        <Route path="/register" element={<Register />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/quiz" element={<QuizInput />} />
-        <Route path="/profile" element={<Profile />} />
       </Routes>
     </Router>
   );
