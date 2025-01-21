@@ -1,5 +1,7 @@
 import React from "react";
 import Sidebar from "./Sidebar";
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
 
 interface TextareasProps {
   text: string;
@@ -25,18 +27,31 @@ const Textareas: React.FC<TextareasProps> = ({
       </div>
       <div style={{ flex: "2" }} className="me-2 d-flex position-relative">
         <div data-mdb-input-init className="form-outline flex-grow-1">
-          <textarea
+          {/* <textarea
             className="form-control h-100"
             id="input"
-            placeholder="Enter or paste text here"
+            placeholder="HEEEEEEEEEEERE"
             style={{ resize: "none" }}
             value={text}
             onChange={(e) => setText(e.target.value)}
-          />
+          /> */}
+          <ReactQuill
+            theme="snow"
+            className="h-100"
+            id="input"
+            placeholder="Start taking notes here"
+            value={text}
+            onChange={setText}
+            // className="form-control h-100"
+            style={{
+              borderRadius: '7px',
+              overflow: 'hidden',
+              border: '1px solid gray'
+            }} />
           <div
             className="position-absolute top-0 end-0 mt-2 me-2 bg-light p-1"
             style={{ cursor: "pointer", fontSize: "1em" }}
-            onClick={handleClear}
+            onClick={handleClear} // also remove or make it white bg
           >
             <i className="bi bi-x-circle"></i>
           </div>
@@ -50,7 +65,7 @@ const Textareas: React.FC<TextareasProps> = ({
             placeholder="Result will appear here"
             style={{ resize: "none" }}
             value={resultText}
-            onChange={(e) => setResultText(e.target.value)}
+            onChange={(e) => setResultText(e.target.value)} // change to non-editable
           />
         </div>
       </div>
