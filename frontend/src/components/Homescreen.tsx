@@ -11,6 +11,7 @@ const Homescreen: React.FC = () => {
   const imageInputRef = useRef<HTMLInputElement>(null);
   const audioInputRef = useRef<HTMLInputElement>(null);
 
+
   // Function to trigger the file input dialog
   const triggerImageUpload = () => {
     if (imageInputRef.current) {
@@ -105,6 +106,8 @@ const Homescreen: React.FC = () => {
       return "An unexpected error occurred.";
     }
   };
+
+
 
   return (
     <div className="container-fluid vh-100 d-flex flex-column">
@@ -205,7 +208,8 @@ const Homescreen: React.FC = () => {
           </div>
         </div>
         <div style={{ flex: "2" }} className="ms-2 d-flex justify-content-end">
-          <button type="button" className="btn btn-secondary">
+          <button type="button" className="btn btn-secondary" data-bs-toggle="modal"
+          data-bs-target="#addNote">
             Save as new note
           </button>
         </div>

@@ -145,7 +145,7 @@ def update_user(user_id: int, user_update: schemas.UserBase, db: Session = Depen
 #         raise HTTPException(status_code=404, detail="User not found")
 #     return crud.list_notes_for_user(db, user_id)
 
-@app.post("/notes/", response_model=schemas.NoteRead)
+@app.post("/notes", response_model=schemas.NoteRead)
 def create_note(
     note: schemas.NoteCreate,
     db: Session = Depends(get_db),

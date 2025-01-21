@@ -16,7 +16,7 @@ const Header = ({ title }: HeaderProps) => {
           type="button"
           className="btn btn-warning mt-2 me-2"
           onClick={() => {
-            navigate("/authorization");
+            navigate("/login");
           }}
         >
           Login

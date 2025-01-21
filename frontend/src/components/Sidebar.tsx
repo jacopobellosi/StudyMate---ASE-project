@@ -1,32 +1,83 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 
 function Sidebar() {
-  const [items, setItems] = useState<string[]>([]); // State to store notes
+  const [items, setItems] = useState<any[]>([]); // State to store notes
+  const [selectedNoteContent, setSelectedNoteContent] = useState<string>(''); // State to store selected note content
   const [, setSelectedIndex] = useState(-1);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const handleSelectItem = (item: string) => {
-    console.log(item);
+  const handleSelectItem = (item: any) => {
+    setSelectedNoteContent(item.note_content);
+  };
+
+  const saveNote = async () => {
+    const titleElement = document.getElementById('enterNameOfNote') as HTMLInputElement;
+    const contentElement = document.getElementById('output') as HTMLTextAreaElement;
+
+    const title = titleElement?.value ?? '';
+    const content = contentElement?.value ?? '';
+
+    if (title && content) {
+      const token = localStorage.getItem('token');
+      const payload = {
+        notes_title: title,
+        note_content: content
+      };
+      try {
+        const response = await fetch('http://localhost:5000/notes', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          },
+          body: JSON.stringify(payload)
+        });
+
+        if (response.ok) {
+          console.log('Note saved successfully');
+          fetchNotes(); // Refresh the notes list after saving a new note
+        } else {
+          console.error('Failed to save note', response.statusText);
+        }
+      } catch (error) {
+        console.error('Error saving note', error);
+      }
+    } else {
+      console.error('Title or content is missing');
+    }
   };
 
   const createNewNote = () => {
-    if (inputRef.current) {
-      const newNote = inputRef.current.value.trim(); // Get the input value
+    saveNote();
+  };
 
-      if (newNote === "") {
-        alert("Note cannot be empty!");
-        return;
+  const fetchNotes = async () => {
+    const token = localStorage.getItem('token');
+
+    try {
+      const response = await fetch('http://localhost:5000/notes', {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        }
+      });
+
+      if (response.ok) {
+        const notes = await response.json();
+        console.log('Fetched notes:', notes);
+        setItems(notes); // Store the entire note objects
+      } else {
+        console.error('Failed to fetch notes', response.statusText);
       }
-
-      if (items.includes(newNote)) {
-        alert("This note already exists!");
-        return;
-      }
-
-      setItems((prevItems) => [...prevItems, newNote]); // Add the new note to the list
-      inputRef.current.value = ""; // Clear the input field
+    } catch (error) {
+      console.error('Error fetching notes', error);
     }
   };
+
+  useEffect(() => {
+    fetchNotes();
+  }, []);
 
   return (
     <div>
@@ -117,7 +168,7 @@ function Sidebar() {
               handleSelectItem(item);
             }}
           >
-            {item}
+            {item.notes_title}
           </a>
         ))}
       </ul>

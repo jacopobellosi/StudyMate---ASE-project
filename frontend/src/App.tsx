@@ -4,6 +4,7 @@ import Paraphrizer from "./components/Paraphrizer";
 import Summarizer from "./components/Summarizer";
 import Docu from "./components/Docu";
 import About from "./components/About";
+import Login from "./components/Login"; 
 import Authorization from "./components/Authorization";
 
 function App() {
@@ -16,6 +17,7 @@ function App() {
         <Route path="/summarizer" element={<Summarizer />} />
         <Route path="/docu" element={<Docu />} />
         <Route path="/about" element={<About />} />
+        <Route path="/login" element={<Login />} />
       </Routes>
     </Router>
   );
