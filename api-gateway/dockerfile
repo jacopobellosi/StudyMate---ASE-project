@@ -1,0 +1,9 @@
+# Use the official Nginx image as a base
+FROM nginx:latest
+
+# Copy your Nginx configuration into the container
+COPY nginx.conf /etc/nginx/nginx.conf
+
+EXPOSE 5554
+
+# CMD ["nginx", "-g", "daemon off;"]

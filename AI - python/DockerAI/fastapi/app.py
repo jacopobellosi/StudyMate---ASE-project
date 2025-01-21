@@ -1,47 +1,37 @@
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, Response, HTTPException
 from pydantic import BaseModel
-import ollama
-from ollama import Options
-from fastapi.middleware.cors import CORSMiddleware
+import requests
 app = FastAPI()
 
-# Allow CORS for the frontend
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["http://localhost:5173"],  # Frontend URL
-    allow_credentials=True,
-    allow_methods=["*"],  # Allow all HTTP methods
-    allow_headers=["*"],  # Allow all headers
-)
 
 
-# Modello per la richiesta
-class SummaryRequest(BaseModel):
-    text: str
-    percentage: float
+@app.get("/")
+def home():
+    return {"Hello": "World"}
 
-
-# Endpoint principale
-@app.post("/summarize/")
-async def summarize(request: SummaryRequest):
-    try:
-        # How much the text has to be summarized?
-        per = request.percentage
-        if not (1 <= per <= 100):
-            raise HTTPException(status_code=400, detail="Percentage must be between 1 and 100.")
+@app.get('/summarize')
+def summarize(request: str, percentage: float):
+    per = percentage
+    if not (1 <= per <= 100):
+        raise HTTPException(status_code=400, detail="Percentage must be between 1 and 100.")
 
         # Prompt per il riassunto
-        prompt = (
-            "You are an expert of writing and summarization, that need to summarize in a precise way the following text."
+    prompt = (
+            "You are an expert of writing and summarization, that need to summarize in a precise way the following text. Your reply has to contain only the summary, nothing else, no presentation or explanation. "
             f"Please summarize the following text into a shorter version while keeping the same tone, "
-            f"style, and meaning. The summary should reduce the original text to approximately {request.percentage}% "
+            f"style, and meaning. The summary should reduce the original text to approximately {percentage}% "
             f"of its length. Do not use bullet points, lists, or any structural changes. The summary should be natural and concise.\n\n"
-            f"Text: {request.text}"
-        )
-        # Chiamata a Ollama
-        response = ollama.generate(model='llama3.2', prompt=prompt,
-                                   options= Options(temperature=0.0,top_k = 20,top_p = 0.5),
-                                   system="""Full context:
+            f"Text: {request}"
+    )
+
+    res = requests.post('http://ollama:11434/api/generate', json={
+        "prompt": prompt,
+        "stream": False,
+        "model": "llama3",
+        "temperature": 0.0,
+        "top_k" : 20,
+        "top_p" : 0.5,
+        "system":"""Full context:
                                             You are a highly intelligent and precise text summarizer. Your goal is to create concise summaries of given texts while adhering to the following guidelines:
                                             1. **Tone and Style**: Maintain the original tone, style, and clarity of the input text. The summary should feel as if it were written by the same author.
                                             2. **Compression Level**: Adjust the length of the summary based on the specified percentage of the original text. If a percentage is provided (e.g., 50%), aim to reduce the text to approximately that proportion. If no percentage is provided, default to a concise summary without rigid constraints.
@@ -60,11 +50,5 @@ async def summarize(request: SummaryRequest):
                                             Always follow these principles unless instructed otherwise.
                                             """
 
-
-
-                                   )
-
-        # Estrai e restituisci il risultato
-        return {"summary": response['response']}
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Error: {str(e)}")
+        })
+    return Response(content=res.text, media_type="application/json")
