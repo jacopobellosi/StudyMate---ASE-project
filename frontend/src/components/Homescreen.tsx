@@ -3,6 +3,8 @@ import Header from "./Header";
 import Textareas from "./Textareas";
 import React, { useState, useRef } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import { AssessmentTest } from "../clients/paraphrasing_tool";
 
 const Homescreen: React.FC = () => {
   let title = "Study Companion";
@@ -10,6 +12,7 @@ const Homescreen: React.FC = () => {
   const [resultText, setResultText] = useState("");
   const imageInputRef = useRef<HTMLInputElement>(null);
   const audioInputRef = useRef<HTMLInputElement>(null);
+  const navigate = useNavigate();
 
   // Function to trigger the file input dialog
   const triggerImageUpload = () => {
@@ -88,6 +91,15 @@ const Homescreen: React.FC = () => {
     setResultText(result); // Update resultText
   };
 
+  const onGenerateQuizClick = async () => {
+    const result = await generateTest(text); // Fetch result from API
+    if (result) {
+      navigate("/quiz", { state: { quizData: result } });
+    } else {
+      alert("Test generation failed. Please try again.");
+    }
+  };
+
   const summarise = async (text: string): Promise<string> => {
     return "TODO Summarized text: " + text;
   };
@@ -96,13 +108,31 @@ const Homescreen: React.FC = () => {
     const requestData = { text, style: "standard" };
     try {
       const response = await axios.post(
-        "http://paraphrasing-tool:5000/paraphrase",
-        requestData
+        "http://localhost:5002/paraphrase",
+        requestData,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+          responseType: "text",
+        }
       );
-      return response.data.paraphrased_text;
+      return response.data;
     } catch (error) {
       console.error("Error communicating with the API:", error);
       return "An unexpected error occurred.";
+    }
+  };
+
+  const generateTest = async (text: string): Promise<AssessmentTest | undefined> => {
+    try {
+      const response = await axios.post<AssessmentTest>("http://localhost:5002/generate_test", {
+        text: text,
+      });
+      return response.data;
+    } catch (error) {
+      console.error("Error generating test:", error);
+      return undefined;
     }
   };
 
@@ -148,6 +178,15 @@ const Homescreen: React.FC = () => {
                   onClick={onParaphraseClick}
                 >
                   Paraphrase
+                </a>
+              </li>
+              <li>
+                <a
+                  className="dropdown-item"
+                  href="#"
+                  onClick={onGenerateQuizClick}
+                >
+                  Generate quiz
                 </a>
               </li>
             </ul>

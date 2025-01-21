@@ -1,15 +1,17 @@
 import Homescreen from "./components/Homescreen";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Paraphrizer from "./components/Paraphrizer";
-import Summarizer from "./components/Summarizer";
+import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
 import Docu from "./components/Docu";
 import About from "./components/About";
 import Authorization from "./components/Authorization";
-
 import Register from "./components/AuthenticationPage";
 import Login from "./components/AuthenticationPage";
-import QuizInput from "./components/quiz/QuizInput";
+import QuizInteractor from "./components/quiz/QuizInteractor"; // Import the QuizInteractor component
 
+function QuizWrapper() {
+  const location = useLocation();
+  const quizData = location.state?.quizData;
+  return <QuizInteractor quizData={quizData} />;
+}
 
 function App() {
   return (
@@ -17,14 +19,11 @@ function App() {
       <Routes>
         <Route path="/" element={<Homescreen />} />
         <Route path="/authorization" element={<Authorization />} />
-        <Route path="/paraphrizer" element={<Paraphrizer />} />
-        <Route path="/summarizer" element={<Summarizer />} />
         <Route path="/docu" element={<Docu />} />
         <Route path="/about" element={<About />} />
-
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/quiz" element={<QuizInput />} />
+        <Route path="/quiz" element={<QuizWrapper />} />
       </Routes>
     </Router>
   );

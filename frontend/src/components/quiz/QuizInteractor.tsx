@@ -1,8 +1,11 @@
 import { useState } from "react";
 import QuizRenderer from "./QuizRenderer";
 import { AssessmentTest } from "../../clients/paraphrasing_tool";
+import Header from "../Header";
+import Footer from "../Footer";
 
-const Quiz = ({ quizData }: { quizData: AssessmentTest }) => {
+const QuizInteractor = ({ quizData }: { quizData: AssessmentTest }) => {
+  let title = "Study Companion";
   const [responses, setResponses] = useState<{ [key: string]: string[] }>({});
   const [submitted, setSubmitted] = useState(false);
   const [scoreSummary, setScoreSummary] = useState<string | null>(null);
@@ -34,31 +37,36 @@ const Quiz = ({ quizData }: { quizData: AssessmentTest }) => {
   };
 
   return (
-    <div style={{ backgroundColor: "#f5f5f5", minHeight: "100vh", padding: "20px" }}>
-      <h1>{quizData.title}</h1>
-      <QuizRenderer
-        test={quizData}
-        responses={responses}
-        onResponseChange={handleResponseChange}
-        submitted={submitted}
-      />
-      {scoreSummary && (
-        <div style={{ backgroundColor: "#fff", borderRadius: "8px", boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)", padding: "20px", marginBottom: "20px" }}>
-          <h2>Quiz Completed!</h2>
-          <p>{scoreSummary}</p>
-          <p>Great job! 🎉</p>
-        </div>
-      )}
-      <button
-        className="btn btn-warning"
-        onClick={handleSubmit}
-        style={{ marginTop: "20px" }}
-      >
-        Submit
-      </button>
+    <div className="container-fluid vh-100 d-flex flex-column">
+      <Header title={title} />
+      <hr className="border border-1 opacity-50"></hr>
+      <div style={{ backgroundColor: "#f5f5f5", minHeight: "100vh", padding: "20px" }}>
+        <h1>{quizData.title}</h1>
+        <QuizRenderer
+          test={quizData}
+          responses={responses}
+          onResponseChange={handleResponseChange}
+          submitted={submitted}
+        />
+        {scoreSummary && (
+          <div style={{ backgroundColor: "#fff", borderRadius: "8px", boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)", padding: "20px", marginBottom: "20px" }}>
+            <h2>Quiz Completed!</h2>
+            <p>{scoreSummary}</p>
+            <p>Great job! 🎉</p>
+          </div>
+        )}
+        <button
+          className="btn btn-warning"
+          onClick={handleSubmit}
+          style={{ marginTop: "20px" }}
+        >
+          Submit
+        </button>
+      </div>
+      <Footer />
     </div>
   );
 };
 
-export default Quiz;
+export default QuizInteractor;
 
