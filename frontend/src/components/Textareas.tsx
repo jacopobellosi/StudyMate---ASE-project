@@ -16,6 +16,12 @@ const Textareas: React.FC<TextareasProps> = ({
   resultText,
   setResultText,
 }) => {
+
+  const handleChange = (value) => {
+    setText(value);
+    console.log(value);
+  }
+
   const handleClear = () => {
     setText("");
   };
@@ -41,7 +47,7 @@ const Textareas: React.FC<TextareasProps> = ({
             id="input"
             placeholder="Start taking notes here"
             value={text}
-            onChange={setText}
+            onChange={handleChange}
             // className="form-control h-100"
             style={{
               borderRadius: '7px',

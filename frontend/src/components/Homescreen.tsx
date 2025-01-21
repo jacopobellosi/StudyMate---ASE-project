@@ -3,6 +3,7 @@ import Header from "./Header";
 import Textareas from "./Textareas";
 import React, { useState, useRef } from "react";
 import axios from "axios";
+import TurndownService from 'turndown';
 
 const Homescreen: React.FC = () => {
   let title = "Study Companion";
@@ -32,7 +33,7 @@ const Homescreen: React.FC = () => {
       const formData = new FormData();
       formData.append("file", file);
 
-      try {
+      try { // TODO: fix
         const response = await axios.post(
           "http://character-recognition:5001/extract-text",
           formData,
@@ -43,7 +44,7 @@ const Homescreen: React.FC = () => {
           }
         );
 
-        setText((prevText) => prevText + "\n\n" + response.data.extracted_text);
+        setText((prevText) => prevText + "\n" + "<p>" + response.data.extracted_text + "</p>");
       } catch (error) {
         console.error("Error uploading file:", error);
         alert("An unexpected error occurred. Please try again.");
@@ -61,7 +62,7 @@ const Homescreen: React.FC = () => {
 
       try {
         const response = await axios.post(
-          "http://voice-transcription:8000/transcribe",
+          "http://127.0.0.1:8000/transcribe",
           formData,
           {
             headers: {
@@ -69,8 +70,8 @@ const Homescreen: React.FC = () => {
             },
           }
         );
-
-        setText((prevText) => prevText + "\n\n" + response.data.text);
+        console.log(response.data.text)
+        setText((prevText) => prevText + "\n" + "<p>" + response.data.text + "</p>");
       } catch (error) {
         console.error("Error uploading file:", error);
         alert("An unexpected error occurred. Please try again.");
@@ -78,17 +79,22 @@ const Homescreen: React.FC = () => {
     }
   };
 
+  //fix
   const onSummariseClick = async () => {
     const result = await summarise(text); // Fetch result from API
     setResultText(result); // Update resultText
   };
 
   const onParaphraseClick = async () => {
-    const result = await paraphrase(text); // Fetch result from API
+    const turndownService = new TurndownService();
+    const markdownText = turndownService.turndown(text);
+    console.log(markdownText)
+    const result = await paraphrase(markdownText); // Fetch result from API
     setResultText(result); // Update resultText
   };
 
   const summarise = async (text: string): Promise<string> => {
+
     return "TODO Summarized text: " + text;
   };
 
