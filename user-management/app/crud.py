@@ -11,6 +11,7 @@ def get_user_by_username(db: Session, username: str):
 def get_user_by_email(db: Session, email: str):
     return db.query(models.User).filter(models.User.email == email).first()
 
+
 def create_user(db: Session, user: schemas.UserCreate):
     #user.password = get_password_hash(user.password)
     db_user = models.User(**user.dict())
@@ -31,6 +32,27 @@ def update_user(db: Session, user_id: int, user_update: schemas.UserBase):
     db.commit()
     db.refresh(db_user)
     return db_user
+
+def create_note(db: Session, user_id: int, note: schemas.NoteCreate):
+    db_note = models.Note(user_id=user_id, **note.dict())
+    db.add(db_note)
+    db.commit()
+    db.refresh(db_note)
+    return db_note
+
+def get_note_by_id(db: Session, note_id: int):
+    return db.query(models.Note).filter(models.Note.id == note_id).first()
+
+def list_notes_for_user(db: Session, user_id: int):
+    return db.query(models.Note).filter(models.Note.user_id == user_id).all()
+
+def delete_note(db: Session, note_id: int):
+    db_note = get_note_by_id(db, note_id)
+    if db_note:
+        db.delete(db_note)
+        db.commit()
+    return db_note
+
 
 def create_chat_session(db: Session, user_id: int):
     session = models.ChatSession(user_id=user_id)

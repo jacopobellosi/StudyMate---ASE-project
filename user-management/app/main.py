@@ -57,6 +57,27 @@ def get_current_user(token: str = Depends(oauth2_scheme), db: Session = Depends(
         raise credentials_exception
     return user
 
+
+def get_user_id_from_token(token: str = Depends(oauth2_scheme)):
+    """
+    Extract user_id directly from the JWT token payload.
+    This avoids querying the database.
+    """
+    credentials_exception = HTTPException(
+        status_code=status.HTTP_401_UNAUTHORIZED,
+        detail="Could not validate credentials",
+        headers={"WWW-Authenticate": "Bearer"},
+    )
+    try:
+        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+        user_id: int = payload.get("user_id")  # Extract user_id from token
+        if user_id is None:
+            raise credentials_exception
+    except JWTError:
+        raise credentials_exception
+    return user_id
+
+    
 @app.get("/")
 def read_root():
     return {"Hello": "World"}
@@ -80,7 +101,9 @@ def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(), db:
         )
     access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
     access_token = create_access_token(
-        data={"sub": user.username}, expires_delta=access_token_expires
+        data={"sub": user.username,
+              "user_id": user.id
+              }, expires_delta=access_token_expires
     )
     return {"access_token": access_token, "token_type": "bearer"}
 
@@ -105,6 +128,90 @@ def update_user(user_id: int, user_update: schemas.UserBase, db: Session = Depen
     if not db_user:
         raise HTTPException(status_code=404, detail="User not found")
     return db_user
+
+#NOTES SECTION
+
+# @app.post("/users/{user_id}/notes/", response_model=schemas.NoteRead)
+# def create_note(user_id: int, note: schemas.NoteCreate, db: Session = Depends(get_db)):
+#     db_user = crud.get_user_by_id(db, user_id)
+#     if not db_user:
+#         raise HTTPException(status_code=404, detail="User not found")
+#     return crud.create_note(db, user_id, note)
+
+# @app.get("/users/{user_id}/notes/", response_model=List[schemas.NoteRead])
+# def list_notes_for_user(user_id: int, db: Session = Depends(get_db)):
+#     db_user = crud.get_user_by_id(db, user_id)
+#     if not db_user:
+#         raise HTTPException(status_code=404, detail="User not found")
+#     return crud.list_notes_for_user(db, user_id)
+
+@app.post("/notes/", response_model=schemas.NoteRead)
+def create_note(
+    note: schemas.NoteCreate,
+    db: Session = Depends(get_db),
+    user_id: int = Depends(get_user_id_from_token),  # Extract user_id from token
+):
+    """
+    Create a new note for the authenticated user.
+    The user_id is extracted from the JWT token.
+    """
+    # No need to validate user existence if you trust the token is valid
+    return crud.create_note(db, user_id, note)
+
+@app.get("/notes", response_model=List[schemas.NoteRead])
+def list_notes_for_user(
+    db: Session = Depends(get_db), 
+    user_id: int = Depends(get_user_id_from_token)
+):
+    """
+    Fetch all notes for the authenticated user.
+    The user_id is extracted directly from the token.
+    """
+    return crud.list_notes_for_user(db, user_id)
+
+@app.get("/notes/{note_id}", response_model=schemas.NoteRead)
+def get_note(
+    note_id: int, 
+    db: Session = Depends(get_db), 
+    user_id: int = Depends(get_user_id_from_token)  # Extract user_id from token
+):
+    """
+    Get a specific note by ID for the authenticated user.
+    Only the user who created the note can view it.
+    """
+    note = crud.get_note_by_id(db, note_id)
+    if not note:
+        raise HTTPException(status_code=404, detail="Note not found")
+    
+    # Check if the note belongs to the current authenticated user
+    if note.user_id != user_id:
+        raise HTTPException(status_code=403, detail="You are not authorized to view this note")
+    
+    return note
+
+@app.delete("/notes/{note_id}", response_model=schemas.NoteRead)
+def delete_note(
+    note_id: int, 
+    db: Session = Depends(get_db), 
+    user_id: int = Depends(get_user_id_from_token)  # Extract user_id from token
+):
+    """
+    Delete a specific note by ID for the authenticated user.
+    Only the user who created the note can delete it.
+    """
+    note = crud.get_note_by_id(db, note_id)
+    if not note:
+        raise HTTPException(status_code=404, detail="Note not found")
+    
+    # Check if the note belongs to the current authenticated user
+    if note.user_id != user_id:
+        raise HTTPException(status_code=403, detail="You are not authorized to delete this note")
+    
+    # Proceed with the deletion
+    return crud.delete_note(db, note_id)
+#NOTES SECTION
+
+
 
 @app.post("/users/{user_id}/chat_sessions/", response_model=schemas.ChatSessionRead)
 def create_chat_session(user_id: int, db: Session = Depends(get_db)):
