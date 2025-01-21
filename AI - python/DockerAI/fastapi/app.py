@@ -1,5 +1,7 @@
 from fastapi import FastAPI, Response, HTTPException
+
 from fastapi.middleware.cors import CORSMiddleware
+import requests
 from pydantic import BaseModel
 import requests
 
@@ -13,6 +15,9 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+
+
 
 @app.get("/")
 def home():
