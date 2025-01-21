@@ -1,3 +1,4 @@
+
 ./bin/ollama serve &
 
 pid=$!

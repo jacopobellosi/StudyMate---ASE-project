@@ -1,7 +1,21 @@
 from fastapi import FastAPI, Response, HTTPException
+
+from fastapi.middleware.cors import CORSMiddleware
+import requests
 from pydantic import BaseModel
 import requests
+
 app = FastAPI()
+
+# Add CORS middleware
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # Adjust this to your needs
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 
 
 
