@@ -6,7 +6,7 @@ import axios from "axios";
 import TurndownService from 'turndown';
 
 const Homescreen: React.FC = () => {
-  let title = "Study Companion";
+  let title = "StudyMate";
   const [text, setText] = useState("");
   const [resultText, setResultText] = useState("");
   const imageInputRef = useRef<HTMLInputElement>(null);
@@ -33,9 +33,9 @@ const Homescreen: React.FC = () => {
       const formData = new FormData();
       formData.append("file", file);
 
-      try { // TODO: fix
+      try { 
         const response = await axios.post(
-          "http://character-recognition:5001/extract-text",
+          "http://127.0.0.1:5001/extract-text",
           formData,
           {
             headers: {
@@ -43,7 +43,7 @@ const Homescreen: React.FC = () => {
             },
           }
         );
-
+        console.log(response.data.extracted_text)
         setText((prevText) => prevText + "\n" + "<p>" + response.data.extracted_text + "</p>");
       } catch (error) {
         console.error("Error uploading file:", error);
@@ -79,18 +79,20 @@ const Homescreen: React.FC = () => {
     }
   };
 
-  //fix
   const onSummariseClick = async () => {
-    const result = await summarise(text); // Fetch result from API
-    setResultText(result); // Update resultText
+    const turndownService = new TurndownService();
+    const markdownText = turndownService.turndown(text);
+    console.log(markdownText)
+    const result = await summarise(markdownText);
+    setResultText(result); 
   };
 
   const onParaphraseClick = async () => {
     const turndownService = new TurndownService();
     const markdownText = turndownService.turndown(text);
     console.log(markdownText)
-    const result = await paraphrase(markdownText); // Fetch result from API
-    setResultText(result); // Update resultText
+    const result = await paraphrase(markdownText); 
+    setResultText(result);
   };
 
   const summarise = async (text: string): Promise<string> => {
@@ -101,6 +103,7 @@ const Homescreen: React.FC = () => {
   const paraphrase = async (text: string): Promise<string> => {
     const requestData = { text, style: "standard" };
     try {
+      // fix URL
       const response = await axios.post(
         "http://paraphrasing-tool:5000/paraphrase",
         requestData
