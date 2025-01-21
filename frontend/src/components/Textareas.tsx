@@ -55,7 +55,7 @@ const Textareas: React.FC<TextareasProps> = ({
               border: '1px solid gray'
             }} />
           <div
-            className="position-absolute top-0 end-0 mt-2 me-2 bg-light p-1"
+            className="position-absolute top-0 end-0 mt-2 me-2 bg-white p-1"
             style={{ cursor: "pointer", fontSize: "1em" }}
             onClick={handleClear} // also remove or make it white bg
           >
