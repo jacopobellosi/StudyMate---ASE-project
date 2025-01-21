@@ -71,7 +71,7 @@ const Textareas: React.FC<TextareasProps> = ({
             placeholder="Result will appear here"
             style={{ resize: "none" }}
             value={resultText}
-            onChange={(e) => setResultText(e.target.value)} // change to non-editable
+            // onChange={(e) => setResultText(e.target.value)} // change to non-editable
           />
         </div>
       </div>
