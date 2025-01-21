@@ -1,6 +1,6 @@
 import Footer from "./Footer";
 import Header from "./Header";
-import Textareas from "./Textareas";
+import Textareas from "./Textareas"; // Import Textareas
 import React, { useState, useRef } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
@@ -10,11 +10,11 @@ const Homescreen: React.FC = () => {
   let title = "Study Companion";
   const [text, setText] = useState("");
   const [resultText, setResultText] = useState("");
+  const [isPopupVisible, setIsPopupVisible] = useState(false);
   const imageInputRef = useRef<HTMLInputElement>(null);
   const audioInputRef = useRef<HTMLInputElement>(null);
   const navigate = useNavigate();
 
-  // Function to trigger the file input dialog
   const triggerImageUpload = () => {
     if (imageInputRef.current) {
       imageInputRef.current.click();
@@ -45,7 +45,6 @@ const Homescreen: React.FC = () => {
             },
           }
         );
-
         setText((prevText) => prevText + "\n\n" + response.data.extracted_text);
       } catch (error) {
         console.error("Error uploading file:", error);
@@ -82,17 +81,19 @@ const Homescreen: React.FC = () => {
   };
 
   const onSummariseClick = async () => {
-    const result = await summarise(text); // Fetch result from API
-    setResultText(result); // Update resultText
+    const result = await summarise(text);
+    setResultText(result);
+    setIsPopupVisible(true);
   };
 
   const onParaphraseClick = async () => {
-    const result = await paraphrase(text); // Fetch result from API
-    setResultText(result); // Update resultText
+    const result = await paraphrase(text);
+    setResultText(result);
+    setIsPopupVisible(true);
   };
 
   const onGenerateQuizClick = async () => {
-    const result = await generateTest(text); // Fetch result from API
+    const result = await generateTest(text);
     if (result) {
       navigate("/quiz", { state: { quizData: result } });
     } else {
@@ -110,12 +111,7 @@ const Homescreen: React.FC = () => {
       const response = await axios.post(
         "http://localhost:5002/paraphrase",
         requestData,
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-          responseType: "text",
-        }
+        { headers: { "Content-Type": "application/json" }, responseType: "text" }
       );
       return response.data;
     } catch (error) {
@@ -134,21 +130,26 @@ const Homescreen: React.FC = () => {
       console.error("Error generating test:", error);
       return undefined;
     }
+  }
+
+  const closePopup = () => {
+    setIsPopupVisible(false);
   };
 
   return (
     <div className="container-fluid vh-100 d-flex flex-column">
       <Header title={title} />
-      <hr className="border border-1 opacity-50"></hr>
+      <hr className="border border-1 opacity-50" />
       <Textareas
         text={text}
         setText={setText}
         resultText={resultText}
-        setResultText={setResultText}
+        isPopupVisible={isPopupVisible}
+        closePopup={closePopup}
       />
       <div className="d-flex mb-3 mt-2">
         <div
-          style={{ flex: "1" }}
+          style={{ flex: "2.5" }}
           className="me-2 d-flex position-relative"
         ></div>
         <div style={{ flex: "2" }} className="me-2 d-flex position-relative">
@@ -166,7 +167,10 @@ const Homescreen: React.FC = () => {
                 <a
                   className="dropdown-item"
                   href="#"
-                  onClick={onSummariseClick}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    onSummariseClick();
+                  }}
                 >
                   Summarise
                 </a>
@@ -175,7 +179,10 @@ const Homescreen: React.FC = () => {
                 <a
                   className="dropdown-item"
                   href="#"
-                  onClick={onParaphraseClick}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    onParaphraseClick();
+                  }}
                 >
                   Paraphrase
                 </a>
@@ -207,8 +214,8 @@ const Homescreen: React.FC = () => {
                   className="dropdown-item"
                   href="#"
                   onClick={(e) => {
-                    e.preventDefault(); // Prevent default navigation behavior
-                    triggerImageUpload(); // Trigger the file input dialog
+                    e.preventDefault();
+                    triggerImageUpload();
                   }}
                 >
                   Image
@@ -219,8 +226,8 @@ const Homescreen: React.FC = () => {
                   className="dropdown-item"
                   href="#"
                   onClick={(e) => {
-                    e.preventDefault(); // Prevent default navigation behavior
-                    triggerAudioUpload(); // Trigger the file input dialog
+                    e.preventDefault();
+                    triggerAudioUpload();
                   }}
                 >
                   Audio
@@ -229,10 +236,10 @@ const Homescreen: React.FC = () => {
             </ul>
             <input
               id="upload-image"
-              ref={imageInputRef} // Assign the ref to the input
+              ref={imageInputRef}
               style={{ display: "none" }}
               type="file"
-              onChange={handleImageUpload} // Handle the file selection
+              onChange={handleImageUpload}
             />
             <input
               id="upload-audio"
@@ -243,7 +250,7 @@ const Homescreen: React.FC = () => {
             />
           </div>
         </div>
-        <div style={{ flex: "2" }} className="ms-2 d-flex justify-content-end">
+        <div style={{ flex: "3" }} className="ms-2 d-flex justify-content-end">
           <button type="button" className="btn btn-secondary">
             Save as new note
           </button>
