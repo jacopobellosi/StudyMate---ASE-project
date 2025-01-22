@@ -126,7 +126,18 @@ const Homescreen: React.FC = () => {
 
   const summarise = async (text: string): Promise<string> => {
 
-    return "TODO Summarized text: " + text;
+    try {
+      const response = await fetch(`http://localhost:8000/summarize?request=${text}&percentage=70`);
+      if (!response.ok) {
+        throw new Error('Failed to summarize text');
+      }
+      const summarizedText = await response.json();
+      
+      return summarizedText;
+    } catch (error) {
+      console.error('Error fetching summary:', error);
+      throw error;
+    } 
   };
 
   const paraphrase = async (text: string): Promise<string> => {

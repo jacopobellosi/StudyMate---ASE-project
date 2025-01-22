@@ -46,6 +46,13 @@ class NoteRead(NoteBase):
     class Config:
         orm_mode = True
 
+class NoteUpdate(BaseModel):
+    notes_title: str
+    note_content: str
+
+    class Config:
+        orm_mode = True
+
 
 class MessageBase(BaseModel):
     sender: str
