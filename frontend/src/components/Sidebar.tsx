@@ -1,32 +1,32 @@
 import { useState, useRef, useEffect } from "react";
 
 interface SidebarProps {
-  text: string;
   setText: React.Dispatch<React.SetStateAction<string>>;
+  setCurrentNoteId: React.Dispatch<React.SetStateAction<number | null>>;
 }
 
-function Sidebar({ text, setText }: SidebarProps) {
+function Sidebar({ setText, setCurrentNoteId }: SidebarProps) {
   const [items, setItems] = useState<any[]>([]); // change from any to some class
-  const [, setSelectedIndex] = useState(-1);
+  const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const handleSelectItem = (item: any) => {
+  const handleSelectItem = (item: any, index: number) => {
     setText(item.note_content);
+    setCurrentNoteId(item.id);
+    setSelectedIndex(index);
   };
 
-  const saveNote = async () => {
+  const createNote = async () => {
     const titleElement = document.getElementById('enterNameOfNote') as HTMLInputElement;
-    const content = text; 
 
     const title = titleElement?.value ?? '';
     console.log('Title:', title);
-    console.log('Content:', content);
 
-    if (title && content) {
+    if (title) {
       const token = localStorage.getItem('token');
       const payload = {
         notes_title: title,
-        note_content: content
+        note_content: ""
       };
       try {
         const response = await fetch('http://localhost:5000/notes', {
@@ -48,12 +48,12 @@ function Sidebar({ text, setText }: SidebarProps) {
         console.error('Error saving note', error);
       }
     } else {
-      console.error('Title or content is missing');
+      console.error('Title is missing');
     }
   };
 
   const createNewNote = () => {
-    saveNote();
+    createNote();
   };
 
   const fetchNotes = async () => {
@@ -166,11 +166,11 @@ function Sidebar({ text, setText }: SidebarProps) {
         {items.map((item, index) => (
           <a
             href="#"
-            className="list-group-item list-group-item-action list-group-item-light"
+            className={`list-group-item list-group-item-action list-group-item-light ${selectedIndex === index ? 'active' : ''}`}
             key={index}
             onClick={() => {
               setSelectedIndex(index);
-              handleSelectItem(item);
+              handleSelectItem(item, index);
             }}
           >
             {item.notes_title}

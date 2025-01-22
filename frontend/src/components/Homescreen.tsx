@@ -13,6 +13,7 @@ const Homescreen: React.FC = () => {
   const [text, setText] = useState("");
   const [resultText, setResultText] = useState("");
   const [isPopupVisible, setIsPopupVisible] = useState(false);
+  const [currentNoteId, setCurrentNoteId] = useState<number | null>(null);
   const imageInputRef = useRef<HTMLInputElement>(null);
   const audioInputRef = useRef<HTMLInputElement>(null);
   const navigate = useNavigate();
@@ -171,6 +172,37 @@ const Homescreen: React.FC = () => {
     setIsPopupVisible(false);
   };
 
+  const saveCurrentNote = async () => {
+    if (currentNoteId === null) {
+      console.error('No note selected to save');
+      return;
+    }
+
+    try {
+      const token = localStorage.getItem('token');
+      const payload = {
+        note_content: text
+      };
+      const response = await fetch(`http://localhost:5000/notes/${currentNoteId}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify(payload)
+      });
+
+      if (response.ok) {
+        console.log('Note saved successfully');
+        fetchNotes(); // Refresh the notes list after saving a new note
+      } else {
+        console.error('Failed to save note', response.statusText);
+      }
+    } catch (error) {
+      console.error('Error saving note', error);
+    }
+  };
+
   return (
     <div className="container-fluid vh-100 d-flex flex-column">
       <Header title={title} />
@@ -181,6 +213,7 @@ const Homescreen: React.FC = () => {
         resultText={resultText}
         isPopupVisible={isPopupVisible}
         closePopup={closePopup}
+        setCurrentNoteId={setCurrentNoteId}
       />
       <div className="d-flex mb-3 mt-2">
         <div
@@ -287,8 +320,7 @@ const Homescreen: React.FC = () => {
         </div>
         <div style={{ flex: "3" }} className="ms-2 d-flex justify-content-end align-items-center">
           {isLoading && <img src={bongoCat} alt="Loading..." style={{ width: '50px', height: '50px', marginRight: '10px' }} />}
-          <button type="button" className="btn btn-secondary" data-bs-toggle="modal"
-          data-bs-target="#addNote">
+          <button type="button" className="btn btn-secondary" onClick={saveCurrentNote}>
             Save
           </button>
         </div>
