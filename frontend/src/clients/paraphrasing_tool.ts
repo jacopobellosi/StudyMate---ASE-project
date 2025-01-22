@@ -3,10 +3,6 @@ export interface ParaphraseRequest {
   style?: string;
 }
 
-export interface ParaphraseResponse {
-  paraphrasedText: string;
-}
-
 export interface SimpleChoice {
   identifier: string;
   text: string;

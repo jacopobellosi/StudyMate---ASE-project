@@ -3,16 +3,21 @@ import Header from "./Header";
 import Textareas from "./Textareas";
 import React, { useState, useRef } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import { AssessmentTest } from "../clients/paraphrasing_tool";
+import TurndownService from 'turndown';
+import bongoCat from '../assets/bongo_cat.gif';
 
 const Homescreen: React.FC = () => {
-  let title = "Study Companion";
+  let title = "🐱 StudyMate";
   const [text, setText] = useState("");
   const [resultText, setResultText] = useState("");
+  const [isPopupVisible, setIsPopupVisible] = useState(false);
   const imageInputRef = useRef<HTMLInputElement>(null);
   const audioInputRef = useRef<HTMLInputElement>(null);
+  const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(false);
 
-
-  // Function to trigger the file input dialog
   const triggerImageUpload = () => {
     if (imageInputRef.current) {
       imageInputRef.current.click();
@@ -28,14 +33,15 @@ const Homescreen: React.FC = () => {
   const handleImageUpload = async (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
+    setIsLoading(true);
     const file = event.target.files?.[0];
     if (file) {
       const formData = new FormData();
       formData.append("file", file);
 
-      try {
+      try { 
         const response = await axios.post(
-          "http://character-recognition:5001/extract-text",
+          "http://127.0.0.1:5001/extract-text",
           formData,
           {
             headers: {
@@ -43,18 +49,20 @@ const Homescreen: React.FC = () => {
             },
           }
         );
-
-        setText((prevText) => prevText + "\n\n" + response.data.extracted_text);
+        console.log(response.data.extracted_text)
+        setText((prevText) => prevText + "\n" + "<p>" + response.data.extracted_text + "</p>");
       } catch (error) {
         console.error("Error uploading file:", error);
         alert("An unexpected error occurred. Please try again.");
       }
     }
+    setIsLoading(false);
   };
 
   const handleAudioUpload = async (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
+    setIsLoading(true);
     const file = event.target.files?.[0];
     if (file) {
       const formData = new FormData();
@@ -62,7 +70,7 @@ const Homescreen: React.FC = () => {
 
       try {
         const response = await axios.post(
-          "http://voice-transcription:8000/transcribe",
+          "http://127.0.0.1:8000/transcribe",
           formData,
           {
             headers: {
@@ -70,26 +78,54 @@ const Homescreen: React.FC = () => {
             },
           }
         );
-
-        setText((prevText) => prevText + "\n\n" + response.data.text);
+        console.log(response.data.text)
+        setText((prevText) => prevText + "\n" + "<p>" + response.data.text + "</p>");
       } catch (error) {
         console.error("Error uploading file:", error);
         alert("An unexpected error occurred. Please try again.");
       }
     }
+    setIsLoading(false);
   };
 
   const onSummariseClick = async () => {
-    const result = await summarise(text); // Fetch result from API
-    setResultText(result); // Update resultText
+    setIsLoading(true);
+    const turndownService = new TurndownService();
+    const markdownText = turndownService.turndown(text);
+    console.log(markdownText);
+    const result = await summarise(markdownText);
+    setResultText(result);
+    setIsPopupVisible(true);
+    setIsLoading(false);
   };
 
   const onParaphraseClick = async () => {
-    const result = await paraphrase(text); // Fetch result from API
-    setResultText(result); // Update resultText
+    setIsLoading(true);
+    const turndownService = new TurndownService();
+    const markdownText = turndownService.turndown(text);
+    console.log(markdownText);
+    const result = await paraphrase(markdownText);
+    setResultText(result);
+    setIsPopupVisible(true);
+    setIsLoading(false);
+  };
+
+  const onGenerateQuizClick = async () => {
+    setIsLoading(true);
+    const turndownService = new TurndownService();
+    const markdownText = turndownService.turndown(text);
+    console.log(markdownText);
+    const result = await generateTest(text);
+    if (result) {
+      navigate("/quiz", { state: { quizData: result } });
+    } else {
+      alert("Test generation failed. Please try again.");
+    }
+    setIsLoading(false);
   };
 
   const summarise = async (text: string): Promise<string> => {
+
     try {
       const response = await fetch(`http://localhost:8000/summarize?request=${text}&percentage=70`);
       if (!response.ok) {
@@ -108,31 +144,47 @@ const Homescreen: React.FC = () => {
     const requestData = { text, style: "standard" };
     try {
       const response = await axios.post(
-        "http://paraphrasing-tool:5000/paraphrase",
-        requestData
+        "http://localhost:5002/paraphrase",
+        requestData,
+        { headers: { "Content-Type": "application/json" }, responseType: "text" }
       );
-      return response.data.paraphrased_text;
+      return response.data;
     } catch (error) {
       console.error("Error communicating with the API:", error);
       return "An unexpected error occurred.";
     }
   };
 
+  const generateTest = async (text: string): Promise<AssessmentTest | undefined> => {
+    try {
+      const response = await axios.post<AssessmentTest>("http://localhost:5002/generate_test", {
+        text: text,
+      });
+      return response.data;
+    } catch (error) {
+      console.error("Error generating test:", error);
+      return undefined;
+    }
+  }
 
+  const closePopup = () => {
+    setIsPopupVisible(false);
+  };
 
   return (
     <div className="container-fluid vh-100 d-flex flex-column">
       <Header title={title} />
-      <hr className="border border-1 opacity-50"></hr>
+      <hr className="border border-1 opacity-50" />
       <Textareas
         text={text}
         setText={setText}
         resultText={resultText}
-        setResultText={setResultText}
+        isPopupVisible={isPopupVisible}
+        closePopup={closePopup}
       />
       <div className="d-flex mb-3 mt-2">
         <div
-          style={{ flex: "1" }}
+          style={{ flex: "1.3" }}
           className="me-2 d-flex position-relative"
         ></div>
         <div style={{ flex: "2" }} className="me-2 d-flex position-relative">
@@ -150,7 +202,10 @@ const Homescreen: React.FC = () => {
                 <a
                   className="dropdown-item"
                   href="#"
-                  onClick={onSummariseClick}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    onSummariseClick();
+                  }}
                 >
                   Summarise
                 </a>
@@ -159,9 +214,21 @@ const Homescreen: React.FC = () => {
                 <a
                   className="dropdown-item"
                   href="#"
-                  onClick={onParaphraseClick}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    onParaphraseClick();
+                  }}
                 >
                   Paraphrase
+                </a>
+              </li>
+              <li>
+                <a
+                  className="dropdown-item"
+                  href="#"
+                  onClick={onGenerateQuizClick}
+                >
+                  Generate quiz
                 </a>
               </li>
             </ul>
@@ -182,8 +249,8 @@ const Homescreen: React.FC = () => {
                   className="dropdown-item"
                   href="#"
                   onClick={(e) => {
-                    e.preventDefault(); // Prevent default navigation behavior
-                    triggerImageUpload(); // Trigger the file input dialog
+                    e.preventDefault();
+                    triggerImageUpload();
                   }}
                 >
                   Image
@@ -194,8 +261,8 @@ const Homescreen: React.FC = () => {
                   className="dropdown-item"
                   href="#"
                   onClick={(e) => {
-                    e.preventDefault(); // Prevent default navigation behavior
-                    triggerAudioUpload(); // Trigger the file input dialog
+                    e.preventDefault();
+                    triggerAudioUpload();
                   }}
                 >
                   Audio
@@ -204,10 +271,10 @@ const Homescreen: React.FC = () => {
             </ul>
             <input
               id="upload-image"
-              ref={imageInputRef} // Assign the ref to the input
+              ref={imageInputRef}
               style={{ display: "none" }}
               type="file"
-              onChange={handleImageUpload} // Handle the file selection
+              onChange={handleImageUpload}
             />
             <input
               id="upload-audio"
@@ -218,10 +285,11 @@ const Homescreen: React.FC = () => {
             />
           </div>
         </div>
-        <div style={{ flex: "2" }} className="ms-2 d-flex justify-content-end">
+        <div style={{ flex: "3" }} className="ms-2 d-flex justify-content-end align-items-center">
+          {isLoading && <img src={bongoCat} alt="Loading..." style={{ width: '50px', height: '50px', marginRight: '10px' }} />}
           <button type="button" className="btn btn-secondary" data-bs-toggle="modal"
           data-bs-target="#addNote">
-            Save as new note
+            Save
           </button>
         </div>
       </div>

@@ -4,7 +4,7 @@ A microservice built using FastAPI for transcribing audio files. Currently, it s
 
 ## Running using Docker:
 #### Building an image:
-`docker build -t voice-transcription:latest .`
+within voice-transcription directory run `docker build -t voice-transcription:latest .`
 #### Running the image on port `8000`:
 `docker run -d -p 8000:8000 --name transcriptify voice-transcription:latest`
 
@@ -22,7 +22,13 @@ This project uses black as code formatter, to run the formatter:
 `poetry run black .`
 
 ### Endpoint testing
-To automate endpoint tests, `Postman` is used.
+For automating endpoint tests, pytest was used and tests can be found on `./tests/test_endpoints.py`
+**To run the tests:**
+- If server is running locally: `cd` to `tests` directory, then run `pytest -v`
+- OR, run the docker image: `docker run -d -p 8000:8000 --name transcriptify voice-transcription:latest`
+then test it as such `docker exec transcriptify bash -c "sleep 90; poetry run pytest -v tests"`
+
+Also, `Postman` is used as follows:
 
 - `GET /`
 ![GET request](/voice-transcription/endpoint_testing/screenshots/get1.png "Title")
@@ -62,12 +68,14 @@ This microservice uses (but doesn't distribute) FFmpeg for converting audio form
 
 ## TODO
 
-- frontend integration
 - take params for language and model size as input
 - unit testing using pytest
-- code documentation
+- ~~code documentation~~
 - github precommits
 - ~~black~~
 - ~~poetry~~
 - ~~maybe docker~~
 - ~~standardize file input format~~
+
+#### CI Triggers
+This line is meant to trigger CI to test it in action.
