@@ -21,7 +21,7 @@ const Textareas: React.FC<TextareasProps> = ({
   return (
     <div className="d-flex mb-3 mt-2 vh-100">
       <div style={{ flex: "1" }} className="me-2 d-flex position-relative">
-        <Sidebar />
+        <Sidebar setResultText={setResultText} />
       </div>
       <div style={{ flex: "2" }} className="me-2 d-flex position-relative">
         <div data-mdb-input-init className="form-outline flex-grow-1">

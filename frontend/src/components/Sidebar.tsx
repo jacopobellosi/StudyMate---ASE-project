@@ -1,13 +1,16 @@
 import { useState, useRef, useEffect } from "react";
 
-function Sidebar() {
+interface SidebarProps {
+  setResultText: React.Dispatch<React.SetStateAction<string>>;
+}
+
+function Sidebar({ setResultText }: SidebarProps) {
   const [items, setItems] = useState<any[]>([]); // State to store notes
-  const [selectedNoteContent, setSelectedNoteContent] = useState<string>(''); // State to store selected note content
   const [, setSelectedIndex] = useState(-1);
   const inputRef = useRef<HTMLInputElement>(null);
 
   const handleSelectItem = (item: any) => {
-    setSelectedNoteContent(item.note_content);
+    setResultText(item.note_content);
   };
 
   const saveNote = async () => {
