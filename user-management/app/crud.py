@@ -43,6 +43,15 @@ def create_note(db: Session, user_id: int, note: schemas.NoteCreate):
 def get_note_by_id(db: Session, note_id: int):
     return db.query(models.Note).filter(models.Note.id == note_id).first()
 
+def update_note(db: Session, note_id: int, note_update: schemas.NoteUpdate):
+    note = db.query(models.Note).filter(models.Note.id == note_id).first()
+    if note:
+        for key, value in note_update.dict().items():
+            setattr(note, key, value)
+        db.commit()
+        db.refresh(note)
+    return note
+
 def list_notes_for_user(db: Session, user_id: int):
     return db.query(models.Note).filter(models.Note.user_id == user_id).all()
 

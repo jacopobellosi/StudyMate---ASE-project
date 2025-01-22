@@ -189,6 +189,24 @@ def get_note(
     
     return note
 
+
+@app.put("/notes/{note_id}", response_model=schemas.NoteRead)
+def update_note(
+    note_id: int,
+    note_update: schemas.NoteUpdate,
+    db: Session = Depends(get_db),
+    user_id: int = Depends(get_user_id_from_token)
+):
+    note = crud.get_note_by_id(db, note_id)
+    if not note:
+        raise HTTPException(status_code=404, detail="Note not found")
+    
+    if note.user_id != user_id:
+        raise HTTPException(status_code=403, detail="You are not authorized to update this note")
+    
+    updated_note = crud.update_note(db, note_id, note_update)
+    return updated_note
+
 @app.delete("/notes/{note_id}", response_model=schemas.NoteRead)
 def delete_note(
     note_id: int, 
