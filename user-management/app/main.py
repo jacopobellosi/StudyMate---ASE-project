@@ -5,8 +5,8 @@ from sqlalchemy.orm import Session
 from datetime import datetime, timedelta
 from jose import JWTError, jwt
 
-from database import Base, engine, get_db
-import crud, schemas
+from .database import Base, engine, get_db
+from . import crud, schemas
 from typing import List, Optional
 
 # Secret key to encode and decode JWT tokens
@@ -21,7 +21,7 @@ app = FastAPI()
 # Add CORS middleware
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000"],  # Adjust this to the specific origins you want to allow
+    allow_origins=["*"],  # Adjust this to the specific origins you want to allow
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
