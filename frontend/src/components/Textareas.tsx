@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Sidebar from "./Sidebar";
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
-import './Textareas.css'; // Import custom CSS
+import './Textareas.css';
 
 interface TextareasProps {
   text: string;
@@ -10,6 +10,7 @@ interface TextareasProps {
   resultText: string;
   isPopupVisible: boolean;
   closePopup: () => void;
+  setCurrentNoteId: React.Dispatch<React.SetStateAction<number | null>>;
 }
 
 const Textareas: React.FC<TextareasProps> = ({
@@ -18,6 +19,7 @@ const Textareas: React.FC<TextareasProps> = ({
   resultText,
   isPopupVisible,
   closePopup,
+  setCurrentNoteId
 }) => {
 
   const [isCopied, setIsCopied] = useState(false);
@@ -39,22 +41,14 @@ const Textareas: React.FC<TextareasProps> = ({
 
   return (
     <div className="d-flex mb-3 mt-2 vh-100">
-      <div style={{ flex: "0.5" }} className="me-2 d-flex position-relative"> {/* Adjusted flex value to make sidebar narrower */}
-        <Sidebar text={text} setText={setText} />
+      <div style={{ flex: "0.5" }} className="me-2 d-flex position-relative">
+      <Sidebar setText={setText} setCurrentNoteId={setCurrentNoteId}/>
       </div>
       <div style={{ flex: "2" }} className="me-2 d-flex position-relative">
         <div data-mdb-input-init className="form-outline flex-grow-1">
-          {/* <textarea
-            className="form-control h-100"
-            id="input"
-            placeholder="HEEEEEEEEEEERE"
-            style={{ resize: "none" }}
-            value={text}
-            onChange={(e) => setText(e.target.value)}
-          /> */}
           <ReactQuill
             theme="snow"
-            className="h-100 custom-quill" // Added custom class
+            className="h-100 custom-quill" 
             id="input"
             placeholder="Start taking notes here"
             value={text}
@@ -62,7 +56,7 @@ const Textareas: React.FC<TextareasProps> = ({
             style={{
               borderRadius: '0px',
               overflow: 'hidden',
-              boxShadow: 'inset 0 0 10px rgba(0, 0, 0, 0.1)' // Added inner shadow
+              boxShadow: 'inset 0 0 10px rgba(0, 0, 0, 0.1)'
             }} />
           <div
             className="position-absolute top-0 end-0 mt-2 me-2 bg-white p-1"
