@@ -6,14 +6,13 @@ from typing import List, Optional
 class UserBase(BaseModel):
     username: str
     email: str
-    full_name: str
-    bio: Optional[str] = None
     profile_pic: Optional[str] = None
 
 
 class UserCreate(UserBase):
-    pass
-
+    password: str
+    email: str
+    username: str
 
 class UserRead(UserBase):
     id: int
@@ -21,6 +20,31 @@ class UserRead(UserBase):
 
     class Config:
         from_attributes = True
+
+
+class Token(BaseModel):
+    access_token: str
+    token_type: str
+
+
+class TokenData(BaseModel):
+    username: Optional[str] = None
+
+
+class NoteBase(BaseModel):
+    notes_title: str
+    note_content: str
+
+class NoteCreate(NoteBase):
+    pass
+
+class NoteRead(NoteBase):
+    id: int
+    user_id: int
+    created_at: datetime
+
+    class Config:
+        orm_mode = True
 
 
 class MessageBase(BaseModel):

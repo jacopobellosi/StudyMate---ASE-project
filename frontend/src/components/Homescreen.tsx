@@ -1,12 +1,12 @@
 import Footer from "./Footer";
 import Header from "./Header";
-import Textareas from "./Textareas"; // Import Textareas
+import Textareas from "./Textareas";
 import React, { useState, useRef } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { AssessmentTest } from "../clients/paraphrasing_tool";
 import TurndownService from 'turndown';
-import bongoCat from '../assets/bongo_cat.gif'; // Import the GIF
+import bongoCat from '../assets/bongo_cat.gif';
 
 const Homescreen: React.FC = () => {
   let title = "🐱 StudyMate";
@@ -16,7 +16,7 @@ const Homescreen: React.FC = () => {
   const imageInputRef = useRef<HTMLInputElement>(null);
   const audioInputRef = useRef<HTMLInputElement>(null);
   const navigate = useNavigate();
-  const [isLoading, setIsLoading] = useState(false); // Add loading state
+  const [isLoading, setIsLoading] = useState(false);
 
   const triggerImageUpload = () => {
     if (imageInputRef.current) {
@@ -132,7 +132,6 @@ const Homescreen: React.FC = () => {
   const paraphrase = async (text: string): Promise<string> => {
     const requestData = { text, style: "standard" };
     try {
-      // fix URL
       const response = await axios.post(
         "http://localhost:5002/paraphrase",
         requestData,
@@ -277,7 +276,8 @@ const Homescreen: React.FC = () => {
         </div>
         <div style={{ flex: "3" }} className="ms-2 d-flex justify-content-end align-items-center">
           {isLoading && <img src={bongoCat} alt="Loading..." style={{ width: '50px', height: '50px', marginRight: '10px' }} />}
-          <button type="button" className="btn btn-secondary">
+          <button type="button" className="btn btn-secondary" data-bs-toggle="modal"
+          data-bs-target="#addNote">
             Save
           </button>
         </div>

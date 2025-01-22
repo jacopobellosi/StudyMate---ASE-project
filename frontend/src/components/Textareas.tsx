@@ -40,7 +40,7 @@ const Textareas: React.FC<TextareasProps> = ({
   return (
     <div className="d-flex mb-3 mt-2 vh-100">
       <div style={{ flex: "0.5" }} className="me-2 d-flex position-relative"> {/* Adjusted flex value to make sidebar narrower */}
-        <Sidebar />
+        <Sidebar text={text} setText={setText} />
       </div>
       <div style={{ flex: "2" }} className="me-2 d-flex position-relative">
         <div data-mdb-input-init className="form-outline flex-grow-1">
