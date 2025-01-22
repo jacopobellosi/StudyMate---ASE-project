@@ -1,4 +1,5 @@
 import React from "react";
+import Sidebar from "./Sidebar";
 
 interface TextareasProps {
   text: string;
@@ -7,14 +8,22 @@ interface TextareasProps {
   setResultText: React.Dispatch<React.SetStateAction<string>>;
 }
 
-const Textareas: React.FC<TextareasProps> = ({ text, setText, resultText, setResultText }) => {
+const Textareas: React.FC<TextareasProps> = ({
+  text,
+  setText,
+  resultText,
+  setResultText,
+}) => {
   const handleClear = () => {
     setText("");
   };
 
   return (
     <div className="d-flex mb-3 mt-2 vh-100">
-      <div className="w-50 me-2 d-flex position-relative">
+      <div style={{ flex: "1" }} className="me-2 d-flex position-relative">
+        <Sidebar setResultText={setResultText} />
+      </div>
+      <div style={{ flex: "2" }} className="me-2 d-flex position-relative">
         <div data-mdb-input-init className="form-outline flex-grow-1">
           <textarea
             className="form-control h-100"
@@ -33,7 +42,7 @@ const Textareas: React.FC<TextareasProps> = ({ text, setText, resultText, setRes
           </div>
         </div>
       </div>
-      <div className="w-50 ms-2 d-flex">
+      <div style={{ flex: "2" }} className="ms-2 d-flex">
         <div data-mdb-input-init className="form-outline flex-grow-1">
           <textarea
             className="form-control h-100"
