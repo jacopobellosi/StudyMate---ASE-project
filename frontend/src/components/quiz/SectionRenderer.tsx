@@ -11,7 +11,7 @@ interface SectionRendererProps {
 
 const SectionRenderer = ({ section, responses, onResponseChange, submitted, displaySectionTitle = false }: SectionRendererProps) => {
   return (
-    <div style={{ backgroundColor: "#f5f5f5", padding: "20px" }}>
+    <div style={{ padding: "20px" }}>
       {displaySectionTitle && <h2>{section.title}</h2>}
       {section.items.map((item: Item, index: number) => (
         <div key={item.identifier} style={{ backgroundColor: "#fff", borderRadius: "8px", boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)", marginBottom: "20px", padding: "20px" }}>
