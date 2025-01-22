@@ -2,10 +2,9 @@ import { useState } from "react";
 import QuizRenderer from "./QuizRenderer";
 import { AssessmentTest } from "../../clients/paraphrasing_tool";
 import Header from "../Header";
-import Footer from "../Footer";
 
 const QuizInteractor = ({ quizData }: { quizData: AssessmentTest }) => {
-  let title = "Study Companion";
+  let title = "🐱 StudyMate";
   const [responses, setResponses] = useState<{ [key: string]: string[] }>({});
   const [submitted, setSubmitted] = useState(false);
   const [scoreSummary, setScoreSummary] = useState<string | null>(null);
@@ -40,7 +39,7 @@ const QuizInteractor = ({ quizData }: { quizData: AssessmentTest }) => {
     <div className="container-fluid vh-100 d-flex flex-column">
       <Header title={title} />
       <hr className="border border-1 opacity-50"></hr>
-      <div style={{ backgroundColor: "#f5f5f5", minHeight: "100vh", padding: "20px" }}>
+      <div style={{ minHeight: "100vh", padding: "20px" }}>
         <h1>{quizData.title}</h1>
         <QuizRenderer
           test={quizData}
@@ -63,7 +62,6 @@ const QuizInteractor = ({ quizData }: { quizData: AssessmentTest }) => {
           Submit
         </button>
       </div>
-      <Footer />
     </div>
   );
 };

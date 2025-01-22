@@ -5,15 +5,18 @@ import React, { useState, useRef } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { AssessmentTest } from "../clients/paraphrasing_tool";
+import TurndownService from 'turndown';
+import bongoCat from '../assets/bongo_cat.gif'; // Import the GIF
 
 const Homescreen: React.FC = () => {
-  let title = "Study Companion";
+  let title = "🐱 StudyMate";
   const [text, setText] = useState("");
   const [resultText, setResultText] = useState("");
   const [isPopupVisible, setIsPopupVisible] = useState(false);
   const imageInputRef = useRef<HTMLInputElement>(null);
   const audioInputRef = useRef<HTMLInputElement>(null);
   const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(false); // Add loading state
 
   const triggerImageUpload = () => {
     if (imageInputRef.current) {
@@ -30,14 +33,15 @@ const Homescreen: React.FC = () => {
   const handleImageUpload = async (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
+    setIsLoading(true);
     const file = event.target.files?.[0];
     if (file) {
       const formData = new FormData();
       formData.append("file", file);
 
-      try {
+      try { 
         const response = await axios.post(
-          "http://character-recognition:5001/extract-text",
+          "http://127.0.0.1:5001/extract-text",
           formData,
           {
             headers: {
@@ -45,17 +49,20 @@ const Homescreen: React.FC = () => {
             },
           }
         );
-        setText((prevText) => prevText + "\n\n" + response.data.extracted_text);
+        console.log(response.data.extracted_text)
+        setText((prevText) => prevText + "\n" + "<p>" + response.data.extracted_text + "</p>");
       } catch (error) {
         console.error("Error uploading file:", error);
         alert("An unexpected error occurred. Please try again.");
       }
     }
+    setIsLoading(false);
   };
 
   const handleAudioUpload = async (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
+    setIsLoading(true);
     const file = event.target.files?.[0];
     if (file) {
       const formData = new FormData();
@@ -63,7 +70,7 @@ const Homescreen: React.FC = () => {
 
       try {
         const response = await axios.post(
-          "http://voice-transcription:8000/transcribe",
+          "http://127.0.0.1:8000/transcribe",
           formData,
           {
             headers: {
@@ -71,43 +78,61 @@ const Homescreen: React.FC = () => {
             },
           }
         );
-
-        setText((prevText) => prevText + "\n\n" + response.data.text);
+        console.log(response.data.text)
+        setText((prevText) => prevText + "\n" + "<p>" + response.data.text + "</p>");
       } catch (error) {
         console.error("Error uploading file:", error);
         alert("An unexpected error occurred. Please try again.");
       }
     }
+    setIsLoading(false);
   };
 
   const onSummariseClick = async () => {
-    const result = await summarise(text);
+    setIsLoading(true);
+    const turndownService = new TurndownService();
+    const markdownText = turndownService.turndown(text);
+    console.log(markdownText);
+    const result = await summarise(markdownText);
     setResultText(result);
     setIsPopupVisible(true);
+    setIsLoading(false);
   };
 
   const onParaphraseClick = async () => {
-    const result = await paraphrase(text);
+    setIsLoading(true);
+    const turndownService = new TurndownService();
+    const markdownText = turndownService.turndown(text);
+    console.log(markdownText);
+    const result = await paraphrase(markdownText);
     setResultText(result);
     setIsPopupVisible(true);
+    setIsLoading(false);
   };
 
   const onGenerateQuizClick = async () => {
+    setIsLoading(true);
+    const turndownService = new TurndownService();
+    const markdownText = turndownService.turndown(text);
+    console.log(markdownText);
     const result = await generateTest(text);
     if (result) {
       navigate("/quiz", { state: { quizData: result } });
     } else {
       alert("Test generation failed. Please try again.");
     }
+    setIsLoading(false);
   };
 
   const summarise = async (text: string): Promise<string> => {
+
     return "TODO Summarized text: " + text;
   };
 
   const paraphrase = async (text: string): Promise<string> => {
     const requestData = { text, style: "standard" };
     try {
+      // fix URL
       const response = await axios.post(
         "http://localhost:5002/paraphrase",
         requestData,
@@ -149,7 +174,7 @@ const Homescreen: React.FC = () => {
       />
       <div className="d-flex mb-3 mt-2">
         <div
-          style={{ flex: "2.5" }}
+          style={{ flex: "1.3" }}
           className="me-2 d-flex position-relative"
         ></div>
         <div style={{ flex: "2" }} className="me-2 d-flex position-relative">
@@ -250,9 +275,10 @@ const Homescreen: React.FC = () => {
             />
           </div>
         </div>
-        <div style={{ flex: "3" }} className="ms-2 d-flex justify-content-end">
+        <div style={{ flex: "3" }} className="ms-2 d-flex justify-content-end align-items-center">
+          {isLoading && <img src={bongoCat} alt="Loading..." style={{ width: '50px', height: '50px', marginRight: '10px' }} />}
           <button type="button" className="btn btn-secondary">
-            Save as new note
+            Save
           </button>
         </div>
       </div>
