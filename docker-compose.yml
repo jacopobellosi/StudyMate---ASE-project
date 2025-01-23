@@ -1,0 +1,53 @@
+services:
+  character-recognition:
+    build: ./character-recognition
+    container_name: character-recognition
+    ports:
+      - "5001:5001"
+    volumes:
+      - ./character-recognition:/app
+    networks:
+      - app-network
+
+  paraphrasing-tool:
+    build: ./paraphrasing-tool
+    container_name: paraphraser
+    ports:
+      - "5002:5000"
+    volumes:
+      - ./paraphrasing-tool:/app
+    networks:
+      - app-network
+
+  voice-transcription:
+    build: ./voice-transcription
+    container_name: voice-transcription
+    ports:
+      - "5003:8000"
+    networks:
+      - app-network
+
+  api-gateway:
+    build: ./api-gateway
+    ports:
+      - "5555:5554"
+    networks:
+      - app-network
+
+  frontend:
+    build: ./frontend
+    ports:
+      - "3000:80"
+    networks:
+      - app-network
+
+  user-management:
+    build: ./user-management
+    ports:
+      - "5000:5000"
+    networks:
+      - app-network      
+
+networks:
+  app-network:
+    driver: bridge

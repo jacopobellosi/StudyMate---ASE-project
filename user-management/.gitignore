@@ -1,4 +1,3 @@
-/.idea/
 __pycache__/
 *.pyc
 *.pyo
@@ -6,4 +5,4 @@ __pycache__/
 *.db
 .pytest_cache/
 .vscode/
-.DS_Store
+.idea/
