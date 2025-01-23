@@ -1,5 +1,5 @@
 import { useState } from "react";
-// import "./style.css";
+import  './style_authenticationPage.css';
 import SignInForm from "./Register";
 import SignUpForm from "./Login";
 
@@ -14,7 +14,7 @@ export default function App() {
   const containerClass =
     "container " + (type === "signUp" ? "right-panel-active" : "");
   return (
-    <div className="App">
+    <div className="App auth-page">
       <h2>Sign in/up Form</h2>
       <div className={containerClass} id="container">
         <SignUpForm />
