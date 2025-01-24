@@ -194,7 +194,7 @@ const Homescreen: React.FC = () => {
 
       if (response.ok) {
         console.log('Note saved successfully');
-        fetchNotes(); // Refresh the notes list after saving a new note
+        // fetchNotes(); // Refresh the notes list after saving a new note
       } else {
         console.error('Failed to save note', response.statusText);
       }

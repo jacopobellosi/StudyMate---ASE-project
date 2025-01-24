@@ -23,11 +23,12 @@ services:
     build: ./voice-transcription
     container_name: voice-transcription
     ports:
-      - "5003:8000"
+      - "8000:8000"
     networks:
       - app-network
 
   api-gateway:
+    container_name: api-gateway
     build: ./api-gateway
     ports:
       - "5555:5554"
@@ -35,6 +36,7 @@ services:
       - app-network
 
   frontend:
+    container_name: frontend
     build: ./frontend
     ports:
       - "3000:80"
@@ -42,6 +44,7 @@ services:
       - app-network
 
   user-management:
+    container_name: user-management
     build: ./user-management
     ports:
       - "5000:5000"
