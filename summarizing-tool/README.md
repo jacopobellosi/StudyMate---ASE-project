@@ -6,12 +6,9 @@ This repository provides a lightweight and efficient microservice for text summa
 **Getting Started**
 -------------------
 
-
-    
-
 ### **Installation**
 
-1.  Build the component by using docker ( is gonna take a long time):
+1.  Build the component by using docker (will take a long time):
 ```bash
 docker compose up --build
 ```

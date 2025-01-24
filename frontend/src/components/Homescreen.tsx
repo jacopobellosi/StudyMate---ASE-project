@@ -128,7 +128,7 @@ const Homescreen: React.FC = () => {
   const summarise = async (text: string): Promise<string> => {
 
     try {
-      const response = await fetch(`http://localhost:8000/summarize?request=${text}&percentage=70`);
+      const response = await fetch(`http://localhost:8001/summarize?request=${text}&percentage=70`);
       if (!response.ok) {
         throw new Error('Failed to summarize text');
       }
