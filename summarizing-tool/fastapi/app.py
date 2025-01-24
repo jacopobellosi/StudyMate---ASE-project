@@ -23,7 +23,6 @@ def summarize(request: str, percentage: float):
     if not (1 <= per <= 100):
         raise HTTPException(status_code=400, detail="Percentage must be between 1 and 100.")
 
-        # Prompt per il riassunto
     prompt = (
             "You are an expert of writing and summarization, that need to summarize in a precise way the following text. Your reply has to contain only the summary, nothing else, no presentation or explanation. "
             f"Please summarize the following text into a shorter version while keeping the same tone, "

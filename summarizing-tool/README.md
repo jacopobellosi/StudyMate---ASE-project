@@ -19,7 +19,7 @@ docker compose up --build
 
 1.  The API will be available at:
 ```bash
-http://localhost:8000/summarize
+http://localhost:8001/summarize (or 8000 if not from docker)
 ```    
 is necessary to send with two parameters:
 request:str and percentage:float 
