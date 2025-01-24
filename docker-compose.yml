@@ -51,6 +51,31 @@ services:
     networks:
       - app-network      
 
+  summarizing-tool:
+    container_name: summarizing-tool
+    build: ./summarizing-tool/fastapi
+    ports:
+      - 8001:8001
+    # volumes: # not needed
+    #   - ./fastapi:/app
+    networks:
+      - app-network
+  
+  ollama:
+    container_name: ollama
+    build: ./summarizing-tool/ollama
+    ports:
+      - 11434:11434
+    volumes:
+      - app-volume:/ollama
+    networks:
+      - app-network
+    entrypoint: ["/usr/bin/bash", "/pull-llama3.sh"]
+
 networks:
   app-network:
     driver: bridge
+
+volumes:
+  app-volume:
+    driver: local

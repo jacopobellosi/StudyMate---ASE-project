@@ -1,9 +1,7 @@
 FROM python:3.8-slim
 
-# Set the working directory
-WORKDIR /app
+COPY . .
 
-COPY ./requirements.txt /app/requirements.txt
-RUN pip3 install -r /app/requirements.txt
+RUN pip3 install -r requirements.txt
 
-CMD fastapi run --reload
+CMD ["uvicorn", "app:app", "--port", "8001", "--host", "0.0.0.0", "--reload"]

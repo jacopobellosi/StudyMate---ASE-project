@@ -13,10 +13,9 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-
 @app.get("/")
 def home():
-    return {"Hello": "World"}
+    return "Summarizer running..."
 
 @app.get('/summarize')
 def summarize(request: str, percentage: float):
