@@ -128,13 +128,16 @@ const Homescreen: React.FC = () => {
   const summarise = async (text: string): Promise<string> => {
 
     try {
-      const response = await fetch(`http://localhost:8000/summarize?request=${text}&percentage=70`);
+      // console.log(`http://localhost:8001/summarize?request=${text}&percentage=70`)
+      const response = await fetch(`http://localhost:8001/summarize?request=${text}&percentage=70`);
       if (!response.ok) {
         throw new Error('Failed to summarize text');
       }
       const summarizedText = await response.json();
+
+      // console.log('Summarized text:', summarizedText);
       
-      return summarizedText;
+      return summarizedText["response"];
     } catch (error) {
       console.error('Error fetching summary:', error);
       throw error;
@@ -194,7 +197,7 @@ const Homescreen: React.FC = () => {
 
       if (response.ok) {
         console.log('Note saved successfully');
-        fetchNotes(); // Refresh the notes list after saving a new note
+        // fetchNotes(); // Refresh the notes list after saving a new note
       } else {
         console.error('Failed to save note', response.statusText);
       }

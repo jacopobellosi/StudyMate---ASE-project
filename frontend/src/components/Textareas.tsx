@@ -59,8 +59,8 @@ const Textareas: React.FC<TextareasProps> = ({
               boxShadow: 'inset 0 0 10px rgba(0, 0, 0, 0.1)'
             }} />
           <div
-            className="position-absolute top-0 end-0 mt-2 me-2 bg-white p-1"
-            style={{ cursor: "pointer", fontSize: "1em" }}
+            className="position-absolute top-0 end-0 mt-2 me-2 bg-transparent p-1"
+            style={{ cursor: "pointer", fontSize: "0.9em" }}
             onClick={handleClear}
           >
             <i className="bi bi-x-circle"></i>

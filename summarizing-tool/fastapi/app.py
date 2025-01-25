@@ -1,13 +1,21 @@
 from fastapi import FastAPI, Response, HTTPException
 from pydantic import BaseModel
 import requests
+from fastapi.middleware.cors import CORSMiddleware
+
 app = FastAPI()
 
-
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 @app.get("/")
 def home():
-    return {"Hello": "World"}
+    return "Summarizer running..."
 
 @app.get('/summarize')
 def summarize(request: str, percentage: float):
@@ -15,7 +23,6 @@ def summarize(request: str, percentage: float):
     if not (1 <= per <= 100):
         raise HTTPException(status_code=400, detail="Percentage must be between 1 and 100.")
 
-        # Prompt per il riassunto
     prompt = (
             "You are an expert of writing and summarization, that need to summarize in a precise way the following text. Your reply has to contain only the summary, nothing else, no presentation or explanation. "
             f"Please summarize the following text into a shorter version while keeping the same tone, "
