@@ -10,6 +10,7 @@ python = "^3.13"
 pytesseract = "^0.3.13"
 flask = "^3.1.0"
 regex = "^2024.11.6"
+flask-cors = "^5.0.0"
 
 
 [tool.poetry.group.dev.dependencies]

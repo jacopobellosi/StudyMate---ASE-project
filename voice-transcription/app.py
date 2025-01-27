@@ -1,14 +1,23 @@
 from vosk_transcriptor.transcriptor import transcribe
 from fastapi import FastAPI, File, UploadFile, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
 from os.path import abspath
 from os import remove
 import uuid
 import pathlib
 
-# initialization code
+## initialization code
 app = FastAPI()
 pathlib.Path("audio_files").mkdir(parents=True, exist_ok=True)
 ##
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 
 @app.get("/")
