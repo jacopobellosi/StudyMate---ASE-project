@@ -69,13 +69,14 @@ This microservice uses (but doesn't distribute) FFmpeg for converting audio form
 ## TODO
 
 - take params for language and model size as input
-- unit testing using pytest
+- ~~unit testing using pytest~~
 - ~~code documentation~~
-- github precommits
+- ~~github precommits~~
 - ~~black~~
 - ~~poetry~~
 - ~~maybe docker~~
 - ~~standardize file input format~~
 
 #### CI Triggers
+This line is meant to trigger CI to test it in action.
 This line is meant to trigger CI to test it in action.
